@@ -1,0 +1,43 @@
+{
+  "name": "@swissquant/juna",
+  "version": "0.2.0",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "!dist/**/*.tsbuildinfo",
+    "src/**/*.ts",
+    "!src/**/*.test.ts"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/swissquant/juna.git"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "prettier": "^3.0.3",
+    "tsup": "^7.2.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.1",
+    "gondi": "^0.3.7",
+    "viem": "^1.13.1"
+  }
+}

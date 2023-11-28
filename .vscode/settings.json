@@ -1,0 +1,10 @@
+{
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // Enable per-language
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  }
+}
