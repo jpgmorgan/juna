@@ -107,5 +107,5 @@ TBD
 
 ## Contributors
 
-- SwissQuant
-- NEMO Ventures
+- [SwissQuant](https://github.com/swissquant)
+- [NEMO Ventures](https://github.com/nemoengineering)
