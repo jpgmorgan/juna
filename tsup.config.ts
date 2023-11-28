@@ -1,7 +1,7 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  name: "plutus",
+  name: "juna",
   entry: ["src/index.ts"],
   outDir: "dist",
   format: ["esm", "cjs"],
