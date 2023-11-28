@@ -1,5 +1,5 @@
 {
-  "name": "@swissquant/juna",
+  "name": "juna",
   "version": "0.3.6",
   "type": "module",
   "sideEffects": false,
