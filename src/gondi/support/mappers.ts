@@ -33,6 +33,7 @@ export const gondiLoanMapper = (gondiLoan: GondiLoan): Loan => {
     endDate: addDaysToDate(new Date(gondiLoan.startTime), durationInDays),
     currency: currency,
     principal: parseInt(gondiLoan.principalAmount) / 10 ** currency.decimals,
+    pnl: parseInt(gondiLoan.principalAmount) / 10 ** currency.decimals, // FIXME
     durationInDays: durationInDays,
     apr: parseInt(gondiLoan.aprBps) / 10000,
     collateral: [
