@@ -63,7 +63,7 @@ export interface Loan {
   endDate: Date;
   currency: Currency;
   principal: number;
-  pnl: number;
+  interestPayment: number;
   durationInDays: number;
   apr: number;
   collateral: Collateral[];

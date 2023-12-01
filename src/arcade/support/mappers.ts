@@ -18,6 +18,9 @@ const arcadeStatusMapper = (status: string): LoanStatus => {
 export const arcadeLoanMapper = (arcadeLoan: ArcadeLoan): Loan => {
   const currency = currencyFromAddress(arcadeLoan.payableCurrency);
   const durationInDays = calculateDurationInDays(parseInt(arcadeLoan.durationSecs));
+  const principal = parseInt(arcadeLoan.principal) / 10 ** currency.decimals;
+  const apr = (parseInt(arcadeLoan.interestRate) / 1e18 / 10000) * (365.25 / durationInDays);
+  // console.log(arcadeLoan);
   return {
     id: arcadeLoan.loanId,
     platform: LendingPlatform.arcade,
@@ -25,12 +28,14 @@ export const arcadeLoanMapper = (arcadeLoan: ArcadeLoan): Loan => {
     lender: arcadeLoan.lenderId.toLowerCase() as `0x${string}`,
     status: arcadeStatusMapper(arcadeLoan.state),
     startDate: new Date(parseInt(arcadeLoan.startDate) * 1e3),
-    endDate: addDaysToDate(new Date(parseInt(arcadeLoan.startDate) * 1e3), durationInDays), // TODO: switch endDate
+    endDate: arcadeLoan.closedAt
+      ? new Date(arcadeLoan.closedAt * 1e3)
+      : addDaysToDate(new Date(parseInt(arcadeLoan.startDate) * 1e3), durationInDays), // TODO: switch endDate
     currency: currency,
     principal: parseInt(arcadeLoan.principal) / 10 ** currency.decimals,
-    pnl: parseInt(arcadeLoan.principal) / 10 ** currency.decimals, // TODO
+    interestPayment: (principal * apr * durationInDays) / 365.25,
     durationInDays: durationInDays,
-    apr: (parseInt(arcadeLoan.interestRate) / 1e18 / 10000) * (365.25 / durationInDays),
+    apr: apr,
     collateral: arcadeLoan.collateral.map((collateral) => ({
       collectionAddress: collateral.collectionAddress,
       collectionName: CollectionRegistry.getCollectionDetails(collateral.collectionAddress).name,
