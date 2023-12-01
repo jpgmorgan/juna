@@ -25,10 +25,10 @@ export const arcadeLoanMapper = (arcadeLoan: ArcadeLoan): Loan => {
     lender: arcadeLoan.lenderId.toLowerCase() as `0x${string}`,
     status: arcadeStatusMapper(arcadeLoan.state),
     startDate: new Date(parseInt(arcadeLoan.startDate) * 1e3),
-    endDate: addDaysToDate(new Date(parseInt(arcadeLoan.startDate) * 1e3), durationInDays),
+    endDate: addDaysToDate(new Date(parseInt(arcadeLoan.startDate) * 1e3), durationInDays), // TODO: switch endDate
     currency: currency,
     principal: parseInt(arcadeLoan.principal) / 10 ** currency.decimals,
-    pnl: parseInt(arcadeLoan.principal) / 10 ** currency.decimals, // FIXME
+    pnl: parseInt(arcadeLoan.principal) / 10 ** currency.decimals, // TODO
     durationInDays: durationInDays,
     apr: (parseInt(arcadeLoan.interestRate) / 1e18 / 10000) * (365.25 / durationInDays),
     collateral: arcadeLoan.collateral.map((collateral) => ({
