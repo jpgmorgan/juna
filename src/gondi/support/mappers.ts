@@ -23,6 +23,8 @@ const gondiStatusMapper = (status: string, sourceType: string): LoanStatus => {
 export const gondiLoanMapper = (gondiLoan: GondiLoan): Loan => {
   const currency = currencyFromAddress(gondiLoan.loan.currency.address);
   const durationInDays = calculateDurationInDays(parseInt(gondiLoan.duration ?? gondiLoan.loan.duration));
+  const principal = parseInt(gondiLoan.principalAmount) / 10 ** currency.decimals;
+  const apr = parseInt(gondiLoan.aprBps) / 10000;
   return {
     id: gondiLoan.id,
     platform: LendingPlatform.gondi,
@@ -30,10 +32,10 @@ export const gondiLoanMapper = (gondiLoan: GondiLoan): Loan => {
     lender: gondiLoan.lenderAddress.toLowerCase() as `0x${string}`,
     status: gondiStatusMapper(gondiLoan.loan.status, gondiLoan.__typename),
     startDate: new Date(gondiLoan.startTime),
-    endDate: addDaysToDate(new Date(gondiLoan.startTime), durationInDays), // TODO: switch endDate
+    endDate: addDaysToDate(new Date(gondiLoan.startTime), durationInDays),
     currency: currency,
     principal: parseInt(gondiLoan.principalAmount) / 10 ** currency.decimals,
-    interestPayment: parseInt(gondiLoan.principalAmount) / 10 ** currency.decimals, // FIXME
+    interestPayment: (principal * apr * durationInDays) / 365,
     durationInDays: durationInDays,
     apr: parseInt(gondiLoan.aprBps) / 10000,
     collateral: [
