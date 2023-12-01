@@ -30,7 +30,7 @@ export const arcadeLoanMapper = (arcadeLoan: ArcadeLoan): Loan => {
     startDate: new Date(parseInt(arcadeLoan.startDate) * 1e3),
     endDate: arcadeLoan.closedAt
       ? new Date(arcadeLoan.closedAt * 1e3)
-      : addDaysToDate(new Date(parseInt(arcadeLoan.startDate) * 1e3), durationInDays), // TODO: switch endDate
+      : addDaysToDate(new Date(parseInt(arcadeLoan.startDate) * 1e3), durationInDays),
     currency: currency,
     principal: parseInt(arcadeLoan.principal) / 10 ** currency.decimals,
     interestPayment: (principal * apr * durationInDays) / 365.25,

@@ -18,6 +18,7 @@ describe("nftfi", () => {
 
     // when
     const loans = await client.getLoansForAccount(address1);
+    // console.log(loans);
 
     // then
     expect(loans).toBeArray();

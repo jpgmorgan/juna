@@ -31,12 +31,14 @@ export const nftfiLoanMapper = (nftfiLoan: NFTfiLoan, lender: `0x${string}`): Lo
     lender: lender.toLowerCase() as `0x${string}`,
     status: nftfiStatusMapper(nftfiLoan.status),
     startDate: new Date(nftfiLoan.date.started),
-    endDate: addDaysToDate(new Date(nftfiLoan.date.started), durationInDays), // TODO: switch endDate
+    endDate: nftfiLoan.date.repaid
+      ? new Date(nftfiLoan.date.repaid)
+      : addDaysToDate(new Date(nftfiLoan.date.started), durationInDays),
     currency: currency,
     principal: parseFloat(nftfiLoan.terms.loan.principal.toString()) / 10 ** currency.decimals,
     interestPayment:
-      parseFloat(nftfiLoan.terms.loan.principal.toString()) / 10 ** currency.decimals -
-      parseFloat(nftfiLoan.terms.loan.repayment.toString()) / 10 ** currency.decimals,
+      parseFloat(nftfiLoan.terms.loan.repayment.toString()) / 10 ** currency.decimals -
+      parseFloat(nftfiLoan.terms.loan.principal.toString()) / 10 ** currency.decimals,
     durationInDays: durationInDays,
     apr:
       (parseFloat(nftfiLoan.terms.loan.repayment.toString()) / parseFloat(nftfiLoan.terms.loan.principal.toString()) -
