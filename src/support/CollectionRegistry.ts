@@ -13,12 +13,12 @@ export const defaultRegistry: Collections = {
     address: "0x60e4d786628fea6478f785a6d7e704777c86a7c6",
     name: "Mutant Ape Yacht Club",
   },
-  "0xe56dd80688f913e36e2e20c2b4a62669a3e23968": {
-    address: "0xe56dd80688f913e36e2e20c2b4a62669a3e23968",
+  "0xd1258db6ac08eb0e625b75b371c023da478e94a9": {
+    address: "0xd1258db6ac08eb0e625b75b371c023da478e94a9",
     name: "DigiDaigaku",
   },
-  "0xddbe45515c5982abcbb315d8bcdf203dd07c81d1": {
-    address: "0xddbe45515c5982abcbb315d8bcdf203dd07c81d1",
+  "0x49cf6f5d44e70224e2e23fdcdd2c053f30ada28b": {
+    address: "0x49cf6f5d44e70224e2e23fdcdd2c053f30ada28b",
     name: "CloneX",
   },
   "0x769272677fab02575e84945f03eca517acc544cc": {
@@ -33,12 +33,16 @@ export const defaultRegistry: Collections = {
     address: "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
     name: "Bored Ape Yacht Club",
   },
+  "0xba30e5f9bb24caa003e9f2f0497ad287fdf95623": {
+    address: "0xba30e5f9bb24caa003e9f2f0497ad287fdf95623",
+    name: "Bored Ape Kennel Club",
+  },
   "0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258": {
     address: "0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258",
     name: "Otherdeed",
   },
-  "0x314ff4acfe223831e132fb959414e5e6176a9127": {
-    address: "0x314ff4acfe223831e132fb959414e5e6176a9127",
+  "0x394e3d3044fc89fcdd966d3cb35ac0b32b0cda91": {
+    address: "0x394e3d3044fc89fcdd966d3cb35ac0b32b0cda91",
     name: "Renga",
   },
   "0xb852c6b5892256c264cc2c888ea462189154d8d7": {
@@ -84,6 +88,10 @@ export const defaultRegistry: Collections = {
   "0xd774557b647330c91bf44cfeab205095f7e6c367": {
     address: "0xd774557b647330c91bf44cfeab205095f7e6c367",
     name: "Nakamigos",
+  },
+  "0x46c9cfb32627b74f91e0b5ad575c247aec7e7847": {
+    address: "0x46c9cfb32627b74f91e0b5ad575c247aec7e7847",
+    name: "NFTfi Locked Bundle",
   },
 };
 
