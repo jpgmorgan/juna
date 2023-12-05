@@ -21,10 +21,6 @@ export const defaultRegistry: Collections = {
     address: "0xddbe45515c5982abcbb315d8bcdf203dd07c81d1",
     name: "CloneX",
   },
-  "0x32799615fa291f51782a320044b3e754cbbed72e": {
-    address: "0x32799615fa291f51782a320044b3e754cbbed72e",
-    name: "Nakamigos",
-  },
   "0x769272677fab02575e84945f03eca517acc544cc": {
     address: "0x769272677fab02575e84945f03eca517acc544cc",
     name: "The Captainz",
@@ -33,12 +29,12 @@ export const defaultRegistry: Collections = {
     address: "0x054c122109b3c658ef2780c9ef6bd0b80818dab8",
     name: "CryptoDickButts",
   },
-  "0xaba7161a7fb69c88e16ed9f455ce62b791ee4d03": {
-    address: "0xaba7161a7fb69c88e16ed9f455ce62b791ee4d03",
+  "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d": {
+    address: "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
     name: "Bored Ape Yacht Club",
   },
-  "0x790b2cf29ed4f310bf7641f013c65d4560d28371": {
-    address: "0x790b2cf29ed4f310bf7641f013c65d4560d28371",
+  "0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258": {
+    address: "0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258",
     name: "Otherdeed",
   },
   "0x314ff4acfe223831e132fb959414e5e6176a9127": {
@@ -72,6 +68,22 @@ export const defaultRegistry: Collections = {
   "0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7": {
     address: "0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7",
     name: "Meebits",
+  },
+  "0x8821bee2ba0df28761afff119d66390d594cd280": {
+    address: "0x8821bee2ba0df28761afff119d66390d594cd280",
+    name: "DeGods",
+  },
+  "0x23581767a106ae21c074b2276d25e5c3e136a68b": {
+    address: "0x23581767a106ae21c074b2276d25e5c3e136a68b",
+    name: "Moonbirds",
+  },
+  "0x8a90cab2b38dba80c64b7734e58ee1db38b8992e": {
+    address: "0x8a90cab2b38dba80c64b7734e58ee1db38b8992e",
+    name: "Doodles",
+  },
+  "0xd774557b647330c91bf44cfeab205095f7e6c367": {
+    address: "0xd774557b647330c91bf44cfeab205095f7e6c367",
+    name: "Nakamigos",
   },
 };
 
