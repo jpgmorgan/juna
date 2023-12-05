@@ -1,4 +1,4 @@
-export { WETH, DAI, USDC, currencyFromAddress } from "./support/currencies";
+export { WETH, DAI, USDC, currencyFromAddress, getErc20Balance } from "./support/currencies";
 export { ArcadeClient } from "./arcade/ArcadeClient";
 export { NftfiClient } from "./nftfi/NFTfiClient";
 export { GondiClient } from "./gondi/GondiClient";
