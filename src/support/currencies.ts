@@ -25,3 +25,26 @@ const currencies: Currencies = {
 };
 
 export const currencyFromAddress = (address: `0x${string}`) => currencies[address.toLowerCase() as `0x${string}`];
+
+import { mainnet } from "viem/chains";
+import { createPublicClient, http, parseAbi } from "viem";
+
+export const getErc20Balance = async (
+  rpcUrl: `https://${string}`,
+  currency: Currency,
+  walletAddress: `0x${string}`,
+) => {
+  const client = createPublicClient({
+    chain: mainnet,
+    transport: http(rpcUrl),
+  });
+
+  const balance = await client.readContract({
+    address: currency.address,
+    abi: parseAbi(["function balanceOf(address _address) public view returns (uint64)"]),
+    functionName: "balanceOf",
+    args: [walletAddress],
+  });
+
+  return Number(balance) / 10 ** currency.decimals;
+};
