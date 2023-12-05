@@ -93,6 +93,10 @@ export const defaultRegistry: Collections = {
     address: "0x46c9cfb32627b74f91e0b5ad575c247aec7e7847",
     name: "NFTfi Locked Bundle",
   },
+  "0xd4e4078ca3495de5b1d4db434bebc5a986197782": {
+    address: "0xd4e4078ca3495de5b1d4db434bebc5a986197782",
+    name: "Autoglyphs",
+  },
 };
 
 export class CollectionRegistry {
