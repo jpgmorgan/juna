@@ -21,5 +21,7 @@ export class Loaner {
 
   public publishCollectionOffers() {
     throw Error("Not implemented");
+    console.log(this.portfolioClient);
+    console.log(this.singleItemOffers);
   }
 }
