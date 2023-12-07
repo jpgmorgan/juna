@@ -3,4 +3,5 @@ export { ArcadeClient } from "./arcade/ArcadeClient";
 export { NftfiClient } from "./nftfi/NFTfiClient";
 export { GondiClient } from "./gondi/GondiClient";
 export { PortfolioClient } from "./support/PortfolioClient";
+export { Loaner } from "./support/loaner";
 export * as types from "./types";
