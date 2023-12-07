@@ -18,6 +18,11 @@ export interface GondiLoan {
       address: `0x${string}`;
       __typename: string;
     };
+    repaidActivity: {
+      totalInterest: string;
+      timestamp: string;
+      __typename: string;
+    };
     nft: {
       id: string;
       name: string;

@@ -32,7 +32,9 @@ export const gondiLoanMapper = (gondiLoan: GondiLoan): Loan => {
     lender: gondiLoan.lenderAddress.toLowerCase() as `0x${string}`,
     status: gondiStatusMapper(gondiLoan.loan.status, gondiLoan.__typename),
     startDate: new Date(gondiLoan.startTime),
-    endDate: addDaysToDate(new Date(gondiLoan.startTime), durationInDays),
+    endDate: gondiLoan.loan.repaidActivity
+      ? new Date(gondiLoan.loan.repaidActivity.timestamp)
+      : addDaysToDate(new Date(gondiLoan.startTime), durationInDays),
     currency: currency,
     principal: parseInt(gondiLoan.principalAmount) / 10 ** currency.decimals,
     interestPayment: (principal * apr * durationInDays) / 365,
