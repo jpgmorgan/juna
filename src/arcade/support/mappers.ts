@@ -19,7 +19,7 @@ export const arcadeLoanMapper = (arcadeLoan: ArcadeLoan): Loan => {
   const currency = currencyFromAddress(arcadeLoan.payableCurrency);
   const durationInDays = calculateDurationInDays(parseInt(arcadeLoan.durationSecs));
   const principal = parseInt(arcadeLoan.principal) / 10 ** currency.decimals;
-  const apr = (parseInt(arcadeLoan.interestRate) / 1e18 / 10000) * (365.25 / durationInDays);
+  const apr = (parseInt(arcadeLoan.interestRate) / 1e18 / 10000) * (365 / durationInDays);
   // console.log(arcadeLoan);
   return {
     id: arcadeLoan.loanId,
@@ -33,7 +33,7 @@ export const arcadeLoanMapper = (arcadeLoan: ArcadeLoan): Loan => {
       : addDaysToDate(new Date(parseInt(arcadeLoan.startDate) * 1e3), durationInDays),
     currency: currency,
     principal: parseInt(arcadeLoan.principal) / 10 ** currency.decimals,
-    interestPayment: (principal * apr * durationInDays) / 365.25,
+    interestPayment: (principal * apr * durationInDays) / 365,
     durationInDays: durationInDays,
     apr: apr,
     collateral: arcadeLoan.collateral.map((collateral) => ({
