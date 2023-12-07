@@ -43,7 +43,7 @@ export const nftfiLoanMapper = (nftfiLoan: NFTfiLoan, lender: `0x${string}`): Lo
     apr:
       (parseFloat(nftfiLoan.terms.loan.repayment.toString()) / parseFloat(nftfiLoan.terms.loan.principal.toString()) -
         1) *
-      (365.25 / durationInDays),
+      (365 / durationInDays),
     collateral: [
       {
         collectionAddress: nftfiLoan.nft.address,
