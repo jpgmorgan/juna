@@ -1,4 +1,4 @@
-import { LendingClient, Loan, Offer } from "../types";
+import { LendingClient, Loan, Offer, CollectionOfferParams } from "../types";
 
 export class PortfolioClient {
   private readonly clients: LendingClient[];
@@ -7,6 +7,12 @@ export class PortfolioClient {
   constructor(clients: LendingClient[], addresses: `0x${string}`[]) {
     this.clients = clients;
     this.addresses = addresses;
+  }
+
+  public async createCollectionOffer(offerParams: CollectionOfferParams) {
+    for (const client of this.clients) {
+      await client.createCollectionOffer(offerParams);
+    }
   }
 
   public async getMyLoans(): Promise<Loan[]> {
