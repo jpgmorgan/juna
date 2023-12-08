@@ -63,7 +63,7 @@ export default class Offers {
 
     const loanTerms: ItemsPayload = {
       durationSecs: durationInDays * 24 * 3600,
-      proratedInterestRate: BigInt(Math.floor(apr * 10000)) * BigInt(1e14),
+      proratedInterestRate: BigInt(Math.floor(((apr * durationInDays) / 365.25) * 10000)) * BigInt(1e18),
       principal: BigInt(Math.floor(principal * 10000)) * BigInt(1e14),
       collateralAddress: offerParams.collectionAddress.toLowerCase(),
       collateralId: "-1",
