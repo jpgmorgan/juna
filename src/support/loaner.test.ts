@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { NftfiClient, ArcadeClient, PortfolioClient, Loaner, WETH } from "..";
+import { NftfiClient, ArcadeClient, PortfolioClient, Loaner, WETH, USDC } from "..";
 
 describe("loaner", () => {
   // setup
@@ -16,8 +16,12 @@ describe("loaner", () => {
 
   test("it can get loans for the portfolio", async () => {
     // when
-    const loanTerms = [{ currency: WETH, ltv: 0.1, durationInDays: 10, apr: 0.12 }];
-    loaner.updateCollectionOffers("0xb7f7f6c52f2e2fdb1963eab30438024864c313f6", 1, loanTerms); // cryptopunks
+    const loanTerms = [
+      { currency: WETH, ltv: 0.1, durationInDays: 10, apr: 0.12 },
+      { currency: WETH, ltv: 0.5, durationInDays: 10, apr: 0.12 },
+      { currency: USDC, ltv: 0.1, durationInDays: 10, apr: 0.12 },
+    ];
+    loaner.updateCollectionOffers("0xb7f7f6c52f2e2fdb1963eab30438024864c313f6", 1, 2200, loanTerms); // cryptopunks
     await loaner.publishCollectionOffers(1);
 
     // then

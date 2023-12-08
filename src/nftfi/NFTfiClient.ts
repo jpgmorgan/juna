@@ -75,8 +75,8 @@ export class NftfiClient implements LendingClient {
     const { principal, currency, apr, durationInDays } = offerParams;
     const payload = {
       terms: {
-        principal: BigInt(principal * 10 ** currency.decimals),
-        repayment: BigInt(principal * (1 + apr * (durationInDays / 365.25)) * 10 ** currency.decimals),
+        principal: BigInt(Math.round(principal * 10 ** currency.decimals)),
+        repayment: BigInt(Math.round(principal * (1 + apr * (durationInDays / 365.25)) * 10 ** currency.decimals)),
         duration: 24 * 3600 * durationInDays,
         currency: currency.address,
         expiry: { seconds: 60 * offerParams.expiryInMinutes },

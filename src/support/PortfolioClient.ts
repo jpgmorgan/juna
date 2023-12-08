@@ -12,7 +12,12 @@ export class PortfolioClient {
   public async createCollectionOffer(offerParams: CollectionOfferParams) {
     const promises = [];
     for (const client of this.clients) {
-      promises.push(client.createCollectionOffer(offerParams));
+      promises.push(
+        client
+          .createCollectionOffer(offerParams)
+          // .then(() => console.log(`${client.constructor.name}: ✓`))
+          .catch((error) => console.error(`${client.constructor.name} ${error.response.data.error}`)),
+      );
     }
     await Promise.all(promises);
   }
