@@ -1,27 +1,35 @@
 import { PortfolioClient } from "..";
+import { Currency } from "../types";
 
-type Offer = { ltv: number; durationInDays: number };
-type CollectionOffers = Record<`0x${string}`, Offer[]>;
-type SingleItemOffers = Record<`0x${string}`, { ids: number[]; multiplier: number; offers: Offer[] }[]>;
+type LoanTerm = { currency: Currency; ltv: number; durationInDays: number; apr: number };
+type CollectionOffer = { basePrice: number; loanTerms: LoanTerm[] };
+type CollectionOffers = Record<`0x${string}`, CollectionOffer>;
 
 export class Loaner {
   private readonly portfolioClient: PortfolioClient;
-  private singleItemOffers: SingleItemOffers;
   private collectionOffers: CollectionOffers;
 
   constructor(portfolioClient: PortfolioClient) {
     this.portfolioClient = portfolioClient;
-    this.singleItemOffers = {};
     this.collectionOffers = {};
   }
 
-  public addCollectionOffers(collectionAddress: `0x${string}`, offers: Offer[]) {
-    this.collectionOffers[collectionAddress] = offers;
+  public updateCollectionOffers(collectionAddress: `0x${string}`, basePrice: number, loanTerms: LoanTerm[]) {
+    this.collectionOffers[collectionAddress] = { basePrice: basePrice, loanTerms: loanTerms };
   }
 
-  public publishCollectionOffers() {
-    throw Error("Not implemented");
-    console.log(this.portfolioClient);
-    console.log(this.singleItemOffers);
+  public async publishCollectionOffers(expiryInMinutes: number = 10) {
+    for (const [collectionAddress, offering] of Object.entries(this.collectionOffers)) {
+      for (const loanTerm of offering.loanTerms) {
+        await this.portfolioClient.createCollectionOffer({
+          collectionAddress: collectionAddress as `0x${string}`,
+          currency: loanTerm.currency,
+          principal: loanTerm.ltv * offering.basePrice,
+          apr: loanTerm.apr,
+          durationInDays: loanTerm.durationInDays,
+          expiryInMinutes: expiryInMinutes,
+        });
+      }
+    }
   }
 }
