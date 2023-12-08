@@ -2,6 +2,7 @@ export { WETH, DAI, USDC, currencyFromAddress, getErc20Balance } from "./support
 export { ArcadeClient } from "./arcade/ArcadeClient";
 export { NftfiClient } from "./nftfi/NFTfiClient";
 export { GondiClient } from "./gondi/GondiClient";
+export { ReservoirClient } from "./reservoir/ReservoirClient";
 export { PortfolioClient } from "./support/PortfolioClient";
 export { Loaner } from "./support/loaner";
 export * as types from "./types";
