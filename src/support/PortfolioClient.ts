@@ -10,9 +10,11 @@ export class PortfolioClient {
   }
 
   public async createCollectionOffer(offerParams: CollectionOfferParams) {
+    const promises = [];
     for (const client of this.clients) {
-      await client.createCollectionOffer(offerParams);
+      promises.push(client.createCollectionOffer(offerParams));
     }
+    await Promise.all(promises);
   }
 
   public async getMyLoans(): Promise<Loan[]> {
