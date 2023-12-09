@@ -3,7 +3,7 @@ import axios, { AxiosInstance } from "axios";
 import { PrivateKeyAccount, PublicClient, createPublicClient, http, parseAbi } from "viem";
 import { mainnet } from "viem/chains";
 
-import { nftfiOfferMapper, nftfiLoanMapper } from "./support/mappers";
+import { nftfiOfferMapper, nftfiLoanMapper, mapError } from "./support/mappers";
 import {
   Loan,
   Offer,
@@ -85,7 +85,12 @@ export class NftfiClient implements LendingClient {
       nftfi: { contract: { name: "v2-3.loan.fixed.collection" } },
     };
 
-    return await this.offers.create(payload).then((res) => nftfiOfferMapper(res));
+    return await this.offers
+      .create(payload)
+      .then((res) => nftfiOfferMapper(res))
+      .catch((error) => {
+        throw mapError(error);
+      });
   }
 
   public async deleteOffer(offerId: string): Promise<void> {

@@ -6,3 +6,4 @@ export { ReservoirClient } from "./reservoir/ReservoirClient";
 export { PortfolioClient } from "./support/PortfolioClient";
 export { Loaner } from "./support/loaner";
 export * as types from "./types";
+export * as errors from "./errors";
