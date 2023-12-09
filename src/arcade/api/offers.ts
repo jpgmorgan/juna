@@ -54,7 +54,7 @@ export default class Offers {
 
   async create(offerParams: ArcadeOfferParams): Promise<ArcadeOffer> {
     const { principal, currency, apr, durationInDays } = offerParams;
-    const nonce = await this.fetchNonce();
+    const nonce = this.getNonce();
 
     const predicate = {
       verifier: this.ARCADE_ITEMS_VERIFIER,
@@ -114,8 +114,7 @@ export default class Offers {
     return BigInt(Math.floor(currentTimePlusOffset.getTime() / 1000)); // Convert to seconds
   }
 
-  private async fetchNonce(): Promise<bigint> {
-    const res = await this.http.get(`/accounts/${this.account.address}`).then((res) => res.data);
-    return BigInt(res.currentLoanTermNonce);
+  private getNonce(): bigint {
+    return BigInt(Date.now());
   }
 }

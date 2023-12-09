@@ -55,7 +55,6 @@ describe("arcade", () => {
     expect(offer.collateral.collectionAddress).toBe(params.collectionAddress);
   });
 
-  // TODO for some reason the offer gets deleted but takes several seconds until cache invalidation on getOffers
   test.skip("it can delete an offer", async () => {
     // given
     const client = new ArcadeClient({ privateKey: privateKey, apiKey: apiKey });
@@ -86,7 +85,6 @@ describe("arcade", () => {
 
     // given
     const client = new ArcadeClient({ privateKey: privateKey, apiKey: apiKey });
-    await Bun.sleep(6000); // TODO remove when better nonce management that removes the lag
 
     // when
     const offer = await client.createCollectionOffer({
