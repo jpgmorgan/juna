@@ -70,7 +70,12 @@ export class ArcadeClient implements LendingClientWithPromissoryNotes {
   }
 
   public async createCollectionOffer(offerParams: CollectionOfferParams): Promise<Offer> {
-    return await this.offers.create(offerParams).then((res) => arcadeOfferMapper(res));
+    return await this.offers
+      .create(offerParams)
+      .then((res) => arcadeOfferMapper(res))
+      .catch((error) => {
+        throw Error(error); // TODO: error mapping
+      });
   }
 
   public async deleteOffer(offerId: string): Promise<void> {
