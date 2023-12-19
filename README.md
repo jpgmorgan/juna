@@ -34,6 +34,12 @@ You're good to go!
 
 ### Client initialization
 
+#### Platform specific client
+
+To only operate from a specific lending platform.
+
+Please note that privateKey is optional. It is only necessary if you want to create loan offers.
+
 ```javascript
 import { NftfiClient, ArcadeClient, GondiClient } from "juna";
 
@@ -47,6 +53,21 @@ const nftfiClient = new NftfiClient({ privateKey: PRIVATE_KEY, apiKey: API_KEY }
 const gondiClient = new GondiClient({ privateKey: PRIVATE_KEY });
 ```
 
+#### Portfolio client
+
+If you aim to operate seamlessly across various lending platforms simultaneously.
+
+Please note:
+
+- Addresses should be specified in case you want to retrieve your loan portfolio across different wallets
+- Clients should be initialised with private keys in case you want to publish loan offers
+
+```javascript
+import { PortfolioClient } from "juna";
+
+const portfolioClient = new PortfolioClient([nftfiClient, arcadeClient, gondiClient], [ADDRESS1, ADDRESS2]);
+```
+
 ### Creating an offer
 
 #### Collection offer
@@ -54,6 +75,7 @@ const gondiClient = new GondiClient({ privateKey: PRIVATE_KEY });
 ```javascript
 import { WETH, DAI, USDC } from "juna";
 
+// Works identically for both platform specific and portfolio clients
 const offer = await client.createCollectionOffer({
   collectionAddress: "0xed5af388653567af2f388e6224dc7c4b3241c544", // azuki
   currency: WETH,
@@ -69,6 +91,7 @@ const offer = await client.createCollectionOffer({
 ```javascript
 import { WETH, DAI, USDC } from "juna";
 
+// Works identically for both platform specific and portfolio clients
 const offer = await client.createSingleItemOffer({
   collectionAddress: "0xed5af388653567af2f388e6224dc7c4b3241c544", // azuki
   nftId: 10, // offering only to the nft id 10
@@ -115,8 +138,16 @@ const loans = await client.getLoans();
 
 #### By account
 
+For platform specific client
+
 ```javascript
 const loans = await client.getLoansForAccount(ACCOUNT_ADDRESS);
+```
+
+For portfolio client (addresses are specified at client initalisation)
+
+```javascript
+const loans = await client.getMyLoans();
 ```
 
 #### By collection (**_not implemented_**)
@@ -162,8 +193,16 @@ const offers = await client.getOffers();
 
 #### By account (**_not implemented_**)
 
+For platform specific clients
+
 ```javascript
 const offers = await client.getOffersForAccount(ACCOUNT_ADDRESS);
+```
+
+For portfolio client (addresses are specified at client initalisation)
+
+```javascript
+const loans = await client.getMyOffers();
 ```
 
 #### By collection (**_not implemented_**)
