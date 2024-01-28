@@ -55,7 +55,6 @@ export const gondiLoanMapper = (gondiLoan: GondiLoan): Loan => {
 export const gondiOfferMapper = (gondiOffer: GondiOffer): Offer => {
   const currency = currencyFromAddress(gondiOffer.principalAddress);
   const durationInDays = Number(gondiOffer.duration) / 24 / 3600;
-  console.log(gondiOffer);
   return {
     id: gondiOffer.id.toString(),
     platform: LendingPlatform.gondi,
