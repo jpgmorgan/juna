@@ -86,7 +86,7 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
       principalAmount: BigInt(offerParams.principal * 1e18),
       capacity: BigInt(offerParams.principal * 1e18),
       fee: 0n, // Origination fee
-      aprBps: BigInt(Math.round(offerParams.apr * 100)),
+      aprBps: BigInt(Math.round(offerParams.apr * 10000)),
       expirationTime: BigInt(nowPlusOffset(offerParams.expiryInMinutes)),
       duration: BigInt(Math.round(offerParams.durationInDays * 24 * 3600)),
       requiresLiquidation: false, // Sets the collateral to be liquidated on default.
