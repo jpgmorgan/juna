@@ -47,3 +47,23 @@ export interface GondiLoan {
   };
   __typename: string;
 }
+
+export interface GondiOffer {
+  aprBps: bigint;
+  borrowerAddress: `0x${string}`;
+  capacity: bigint;
+  collectionId: number;
+  contractAddress: `0x${string}`;
+  duration: bigint;
+  expirationTime: bigint;
+  fee: bigint;
+  lenderAddress: `0x${string}`;
+  offerHash: `0x${string}`;
+  offerId: bigint;
+  principalAddress: `0x${string}`;
+  principalAmount: bigint;
+  signature: `0x${string}`;
+  id: string;
+  nftCollateralAddress: `0x${string}`;
+  nftCollateralTokenId: bigint;
+}

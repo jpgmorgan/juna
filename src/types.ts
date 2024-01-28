@@ -1,7 +1,7 @@
 export type Currency = { address: `0x${string}`; symbol: string; decimals: number };
 export type Currencies = Record<`0x${string}`, Currency>;
 
-export type CollectionDetails = { address: `0x${string}`; name: string };
+export type CollectionDetails = { address: `0x${string}`; name: string; gondiCollectionId?: string };
 export type Collections = Record<`0x${string}`, CollectionDetails>;
 
 export interface LendingClient {

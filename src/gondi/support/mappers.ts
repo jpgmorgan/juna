@@ -1,6 +1,6 @@
-import { LendingPlatform, Loan, LoanStatus } from "../../types";
+import { LendingPlatform, Loan, LoanStatus, Offer, OfferType } from "../../types";
 import { currencyFromAddress } from "../../support/currencies";
-import { GondiLoan } from "./types";
+import { GondiLoan, GondiOffer } from "./types";
 import { CollectionRegistry } from "../../support/CollectionRegistry";
 import { addDaysToDate, calculateDurationInDays } from "../../helpers";
 
@@ -49,5 +49,28 @@ export const gondiLoanMapper = (gondiLoan: GondiLoan): Loan => {
         nftId: parseInt(gondiLoan.loan.nft.id),
       },
     ],
+  };
+};
+
+export const gondiOfferMapper = (gondiOffer: GondiOffer): Offer => {
+  const currency = currencyFromAddress(gondiOffer.principalAddress);
+  const durationInDays = Number(gondiOffer.duration) / 24 / 3600;
+  console.log(gondiOffer);
+  return {
+    id: gondiOffer.id.toString(),
+    platform: LendingPlatform.gondi,
+    lender: gondiOffer.lenderAddress,
+    offerDate: new Date(),
+    expiryDate: new Date(Number(gondiOffer.expirationTime) * 1e3),
+    type: gondiOffer.nftCollateralTokenId === 0n ? OfferType.collectionOffer : OfferType.singleItemOffer,
+    currency: currency,
+    principal: Number(gondiOffer.principalAmount) / 10 ** currency.decimals,
+    durationInDays: durationInDays,
+    apr: Number(gondiOffer.aprBps) / 10000,
+    collateral: {
+      collectionAddress: gondiOffer.nftCollateralAddress,
+      collectionName: CollectionRegistry.getCollectionDetails(gondiOffer.nftCollateralAddress).name,
+      nftId: Number(gondiOffer.nftCollateralTokenId).toString(),
+    },
   };
 };
