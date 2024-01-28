@@ -15,7 +15,7 @@ import {
 } from "../types";
 import Loans from "./api/loans";
 import Offers from "./api/offers";
-import { gondiLoanMapper, gondiOfferMapper } from "./support/mappers";
+import { gondiLoanMapper, gondiOfferMapper, mapError } from "./support/mappers";
 
 const nowPlusOffset = (offset: number) => {
   const currentTime = new Date();
@@ -92,7 +92,12 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
       requiresLiquidation: false, // Sets the collateral to be liquidated on default.
       // borrowerAddress: null, // Optional: allow only this borrower to accept the offer.
     };
-    return await this.offers.createCollectionOffer(payload).then((res) => gondiOfferMapper(res));
+    return await this.offers
+      .createCollectionOffer(payload)
+      .then((res) => gondiOfferMapper(res))
+      .catch((error) => {
+        throw mapError(error);
+      });
   }
 
   public async deleteOffer(offerId: string): Promise<void> {

@@ -3,6 +3,7 @@ import { currencyFromAddress } from "../../support/currencies";
 import { GondiLoan, GondiOffer } from "./types";
 import { CollectionRegistry } from "../../support/CollectionRegistry";
 import { addDaysToDate, calculateDurationInDays } from "../../helpers";
+import { CollectionNotSupported } from "../../errors";
 
 const gondiStatusMapper = (status: string, sourceType: string): LoanStatus => {
   if (sourceType === "LostSource") {
@@ -72,4 +73,14 @@ export const gondiOfferMapper = (gondiOffer: GondiOffer): Offer => {
       nftId: Number(gondiOffer.nftCollateralTokenId).toString(),
     },
   };
+};
+
+export const mapError = (error: any) => {
+  const errorMessage = JSON.stringify(error.response.data.errors);
+  switch (errorMessage) {
+    case `Field 'collectionId' of required type 'Int!' was not provided.`:
+      return new CollectionNotSupported();
+    default:
+      return Error(errorMessage);
+  }
 };

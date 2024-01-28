@@ -39,6 +39,5 @@ describe("gondi", () => {
 
     // when
     const offer = await client.createCollectionOffer(params);
-    console.log(offer);
   });
 });
