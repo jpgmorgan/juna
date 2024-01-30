@@ -12,7 +12,7 @@ describe("blur", () => {
 
     // when
     const loans = await client.getLoansForAccount(address1.toLowerCase() as `0x${string}`);
-    console.log(loans);
+    // console.log(loans);
 
     // then
     expect(loans).toBeArray();
