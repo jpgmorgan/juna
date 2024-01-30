@@ -16,6 +16,7 @@ import {
 import Loans from "./api/loans";
 import Offers from "./api/offers";
 import { gondiLoanMapper, gondiOfferMapper, mapError } from "./support/mappers";
+import { CollectionNotSupported } from "../errors";
 
 const nowPlusOffset = (offset: number) => {
   const currentTime = new Date();
@@ -45,6 +46,18 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
 
     this.loans = new Loans(this.http);
     this.offers = new Offers(this.http, this.client);
+  }
+
+  public async _getCollectionId(collectionAddress: `0x${string}`): Promise<any> {
+    const collectionId = (
+      await this.client.collectionId({
+        contractAddress: collectionAddress,
+      })
+    )[0];
+    if (collectionId === undefined) {
+      throw new CollectionNotSupported();
+    }
+    return collectionId;
   }
 
   public async getListings(): Promise<Listing[]> {
@@ -79,9 +92,7 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
 
   public async createCollectionOffer(offerParams: CollectionOfferParams): Promise<Offer> {
     const payload = {
-      collectionId: (
-        await this.client.collectionId({ contractAddress: offerParams.collectionAddress as `0x${string}` })
-      )[0],
+      collectionId: await this._getCollectionId(offerParams.collectionAddress),
       principalAddress: offerParams.currency.address,
       principalAmount: BigInt(offerParams.principal * 1e18),
       capacity: BigInt(offerParams.principal * 1e18),
