@@ -91,7 +91,10 @@ export class GhostApi {
     } as RequestInit;
     const liens = await this.getPage().evaluate(
       async (options, address) => {
-        const response = await fetch(`https://core-api.prod.blur.io/v1/portfolio/${address}/liens`, options);
+        const response = await fetch(
+          `https://core-api.prod.blur.io/v1/portfolio/${address.toLowerCase()}/liens`,
+          options,
+        );
         return response.json();
       },
       options,
