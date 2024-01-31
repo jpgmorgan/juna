@@ -10,12 +10,13 @@ import {
 } from "../types";
 import { GhostApi } from "./GhostApi";
 import { blurLoanMapper } from "./support/mappers";
+import { generatePrivateKey } from "viem/accounts";
 
 export class BlurClient implements LendingClientWithPromissoryNotes {
   private api: GhostApi;
 
   constructor(p: LendingClientParameters) {
-    this.api = new GhostApi(p.privateKey as `0x${string}`);
+    this.api = new GhostApi(p.privateKey ?? generatePrivateKey());
   }
 
   public async getListings(): Promise<Listing[]> {
