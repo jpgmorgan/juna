@@ -18,6 +18,12 @@ export const USDC: Currency = {
   decimals: 6,
 };
 
+export const BETH: Currency = {
+  address: "0x0000000000A39bb272e79075ade125fd351887Ac",
+  symbol: "BETH",
+  decimals: 18,
+};
+
 const currencies: Currencies = {
   "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": WETH,
   "0x6b175474e89094c44da98b954eedeac495271d0f": DAI,
