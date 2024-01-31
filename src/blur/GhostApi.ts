@@ -3,6 +3,7 @@ import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import { Page, Browser } from "puppeteer";
 import { PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
+import { BlurLoan } from "./support/types";
 
 puppeteer.use(StealthPlugin());
 
@@ -82,7 +83,7 @@ export class GhostApi {
     );
   }
 
-  public async getLiens(address: `0x${string}`) {
+  public async getLiens(address: `0x${string}`): Promise<BlurLoan[]> {
     await this.initialise();
     const options = {
       method: "GET",

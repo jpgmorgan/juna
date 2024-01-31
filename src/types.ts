@@ -34,6 +34,7 @@ export enum LendingPlatform {
   nftfi = "nftfi",
   arcade = "arcade",
   gondi = "gondi",
+  blur = "blur",
 }
 
 export interface Listing {

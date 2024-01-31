@@ -9,6 +9,7 @@ import {
   CollectionOfferParams,
 } from "../types";
 import { GhostApi } from "./GhostApi";
+import { blurLoanMapper } from "./support/mappers";
 
 export class BlurClient implements LendingClientWithPromissoryNotes {
   private api: GhostApi;
@@ -35,7 +36,7 @@ export class BlurClient implements LendingClientWithPromissoryNotes {
   }
 
   public async getLoansForAccount(address: `0x${string}`): Promise<Loan[]> {
-    return await this.api.getLiens(address);
+    return await this.api.getLiens(address).then((res) => res.map(blurLoanMapper));
   }
 
   public async getMyLoans(): Promise<Loan[]> {
