@@ -24,7 +24,18 @@ export class GhostApi {
     if (this.initialised) {
       return;
     }
-    this.browser = await puppeteer.launch({ headless: "new" });
+    this.browser = await puppeteer.launch({
+      headless: "new",
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--disable-gpu",
+      ],
+    });
     this.page = await this.browser.newPage();
     await this.page.goto("https://blur.io/");
     const challenge = await this.challenge();
