@@ -10,13 +10,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v1.1.1
         with:
-          node-version: "20.x"
+          bun-version: latest
 
       - name: Install dependencies
-        run: npm install
+        id: install_code
+        run: bun install --frozen-lockfile
 
   #      - name: Setup test environment
   #        run: cp .env.test .env
@@ -34,23 +35,25 @@ jobs:
       packages: write
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          node-version: "20.x"
+          fetch-depth: 0
 
-      - name: Authenticate with npm
-        run: echo "//registry.npmjs.org/:_authToken=\${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v1.1.1
+        with:
+          bun-version: latest
 
       - name: Install dependencies
-        run: npm install
+        id: install_code
+        run: bun install --frozen-lockfile
 
-      - name: Build package with esbuild
-        run: npm run build
+      - name: Build
+        id: build_code
+        run: bun run build
 
       - name: Publish package
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}

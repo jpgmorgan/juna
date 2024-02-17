@@ -32,7 +32,7 @@
     "gondi",
     "Portfolio",
     "offer"
-  ]
+  ],
   "scripts": {
     "build": "tsup"
   },
