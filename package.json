@@ -1,6 +1,7 @@
 {
   "name": "juna",
   "version": "3.2.9",
+  "description": "A cross platform NFT lending client for serious lenders",
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.cjs",

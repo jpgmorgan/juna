@@ -1,4 +1,4 @@
-# JUNA - a NFT lending client for serious lenders
+# JUNA - A cross platform NFT lending client for serious lenders
 
 ## Setup
 
