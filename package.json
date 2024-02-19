@@ -20,6 +20,19 @@
       "default": "./dist/index.cjs"
     }
   },
+  "keywords": [
+    "nft",
+    "lend",
+    "lending",
+    "loan",
+    "mortgage",
+    "borrow",
+    "arcade",
+    "nftfi",
+    "gondi",
+    "Portfolio",
+    "offer"
+  ],
   "scripts": {
     "build": "tsup"
   },
