@@ -1,9 +1,11 @@
+import assert from "assert";
 import { describe, expect, test } from "bun:test";
 
 import { NftfiClient } from "./NFTfiClient";
 import { WETH } from "../support/currencies";
 import { TestConfig } from "../support/config.test";
 import { LendingPlatform, CollectionOfferParams, OfferType } from "../types";
+import { AccountUnderfunded } from "../errors";
 
 describe("nftfi", () => {
   test("getLoansForAccount", async () => {
@@ -42,6 +44,27 @@ describe("nftfi", () => {
     expect(offer.durationInDays).toBe(params.durationInDays);
     // expect(offer.apr).toBe(params.apr); TODO make a comparison that handles rounding errors
     expect(offer.collateral.collectionAddress).toBe(params.collectionAddress);
+  });
+
+  test("createCollectionOffer:AccountUnderfunded", async () => {
+    // given
+    const client = new NftfiClient({ privateKey: TestConfig.privateKey, apiKey: TestConfig.nftfiApiKey });
+    const params: CollectionOfferParams = {
+      collectionAddress: "0xed5af388653567af2f388e6224dc7c4b3241c544", // azuki
+      currency: WETH,
+      principal: 1,
+      apr: 0.5,
+      durationInDays: 365,
+      expiryInMinutes: 0.2,
+    };
+
+    // when and then
+    try {
+      await client.createCollectionOffer(params);
+      throw Error("offer went through");
+    } catch (error) {
+      assert(error instanceof AccountUnderfunded, "thrown error is not an instance of AccountUnderfunded");
+    }
   });
 
   // TODO for some reason the delete call is flaky with a 401
