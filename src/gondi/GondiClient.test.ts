@@ -1,36 +1,41 @@
-import { GondiClient } from "./GondiClient";
-import { CollectionOfferParams } from "../types";
-import { WETH } from "../support/currencies";
-import { describe, expect, test } from "bun:test";
-import { CollectionNotSupported } from "../errors";
 import assert from "assert";
+import { describe, expect, test } from "bun:test";
+
+import { GondiClient } from "./GondiClient";
+import { WETH } from "../support/currencies";
+import { CollectionOfferParams } from "../types";
+import { CollectionNotSupported } from "../errors";
+import { TestConfig } from "../support/config.test";
 
 describe("gondi", () => {
-  // setup
-  const privateKey = (process.env.PRIVATE_KEY === "" ? "0x" : process.env.PRIVATE_KEY) as `0x${string}`;
-  const address1 = process.env.ADDRESS1 as `0x${string}`;
-
-  test("it can get loans for the account", async () => {
+  test("getLoansForAccount:getMultipleLoans", async () => {
     // given
     const client = new GondiClient({});
 
     // when
-    const loans = await client.getLoansForAccount(address1);
-    // console.log(loans);
-    // console.log(loans.length);
+    const loans = await client.getLoansForAccount(TestConfig.addressGondi);
 
     // then
     expect(loans).toBeArray();
+    expect(loans.length).toBeGreaterThan(0);
+    // TODO: test type of records within the array
   });
 
-  test("it can create a collection offer", async () => {
-    // cancel if no private key
-    if (privateKey === "0x") {
-      return;
-    }
-
+  test("getLoansForAccount:getNoLoans", async () => {
     // given
-    const client = new GondiClient({ privateKey: privateKey });
+    const client = new GondiClient({});
+
+    // when
+    const loans = await client.getLoansForAccount("0x0000000000000000000000000000000000000000");
+
+    // then
+    expect(loans).toBeArray();
+    expect(loans.length).toBe(0);
+  });
+
+  test("createCollectionOffer", async () => {
+    // given
+    const client = new GondiClient({ privateKey: TestConfig.privateKey });
     const params: CollectionOfferParams = {
       collectionAddress: "0xed5af388653567af2f388e6224dc7c4b3241c544", // azuki
       currency: WETH,
@@ -42,16 +47,12 @@ describe("gondi", () => {
 
     // when
     const offer = await client.createCollectionOffer(params);
+    // TODO: try to delete offer after
   });
 
-  test("it create a collection offer with a non supported collection", async () => {
-    // cancel if no private key
-    if (privateKey === "0x") {
-      return;
-    }
-
+  test("createCollectionOffer:CollectionNotSupported", async () => {
     // given
-    const client = new GondiClient({ privateKey: privateKey });
+    const client = new GondiClient({ privateKey: TestConfig.privateKey });
     const params: CollectionOfferParams = {
       collectionAddress: "0x60E4d786628Fea6478F785A6d7e704777c86a7c6", // mayc
       currency: WETH,

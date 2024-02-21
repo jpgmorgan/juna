@@ -9,13 +9,13 @@ export class TestConfig {
 
   // API keys
   static nftfiApiKey = process.env.NFTFI_API_KEY ?? "";
-  static arcadeApiKey = process.env.ARCADE_API_KEY ?? "";
+  static arcadeApiKey = process.env.ARCADE_API_KEY ?? "4GmEpqEl9On8BREgrbHvP6sx9IteMxX7T1Y1JpMfXXLi2QADe";
 
   // Addresses from lenders from which to be inspired
   static addressNftfi: `0x${string}` = "0xc0D5B6F1B40B458746bC5f0fea76C20670C1DE21";
-  static addressArcade: `0x${string}` = "0x";
-  static addressGondi: `0x${string}` = "0x";
-  static addressBlur: `0x${string}` = "0x";
+  static addressArcade: `0x${string}` = "0xF4Fb9FA23edB32215E5284cf7dBfDB5607d51a5b";
+  static addressGondi: `0x${string}` = "0x39C60bAe189D4EBacB6616bB20D8c3a0abd7ea85";
+  static addressBlur: `0x${string}` = "0xa69833B9fDa816f1bFC79517E7932E64708Df0dd";
 
   // RPC url
   static rpcUrl: `https://${string}` = "https://eth.llamarpc.com";
