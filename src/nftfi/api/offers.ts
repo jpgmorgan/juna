@@ -36,7 +36,7 @@ export default class Offers {
       case "v2-3.loan.fixed.collection": {
         let payload = await this.constructV2_3FixedCollectionOffer(params);
 
-        const res: { result: NFTfiOffer } = await this.http.post("/v0.1/offers", payload).then((res) => res.data);
+        const res: { result: NFTfiOffer } = await this.http.post("/v0.2/offers", payload).then((res) => res.data);
         return res.result;
       }
       default: {
