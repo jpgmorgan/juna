@@ -1,45 +1,33 @@
-import { privateKeyToAccount } from "viem/accounts";
 import { describe, expect, test } from "bun:test";
 
-import { LendingPlatform, CollectionOfferParams, OfferType } from "../types";
-import { WETH } from "../support/currencies";
 import { NftfiClient } from "./NFTfiClient";
+import { WETH } from "../support/currencies";
+import { TestConfig } from "../support/config.test";
+import { LendingPlatform, CollectionOfferParams, OfferType } from "../types";
 
 describe("nftfi", () => {
-  // setup
-  const privateKey = (process.env.PRIVATE_KEY === "" ? "0x" : process.env.PRIVATE_KEY) as `0x${string}`;
-  const apiKey = process.env.NFTFI_API_KEY ?? "";
-  const address1 = process.env.ADDRESS1 as `0x${string}`;
-  const rpcUrl = process.env.RPC_URL === "" ? "https://" : (process.env.RPC_URL as `https://${string}`);
-
-  test("it can get loans for the account", async () => {
+  test("getLoansForAccount", async () => {
     // given
-    const client = new NftfiClient({ apiKey: apiKey });
+    const client = new NftfiClient({ apiKey: TestConfig.nftfiApiKey });
 
     // when
-    const loans = await client.getLoansForAccount(address1);
-    // console.log(loans);
+    const loans = await client.getLoansForAccount(TestConfig.addressFromLender1);
 
     // then
     expect(loans).toBeArray();
+    expect(loans.length).toBeGreaterThan(0);
   });
 
-  test("it can create a collection offer", async () => {
-    // cancel if no private key
-    if (privateKey === "0x") {
-      return;
-    }
-
+  test("createCollectionOffer", async () => {
     // given
-    const client = new NftfiClient({ privateKey: privateKey, apiKey: apiKey });
-    const account = privateKeyToAccount(privateKey);
+    const client = new NftfiClient({ privateKey: TestConfig.privateKey, apiKey: TestConfig.nftfiApiKey });
     const params: CollectionOfferParams = {
       collectionAddress: "0xed5af388653567af2f388e6224dc7c4b3241c544", // azuki
       currency: WETH,
-      principal: 0.1,
+      principal: 10 / 1e18,
       apr: 0.5,
-      durationInDays: 1,
-      expiryInMinutes: 5,
+      durationInDays: 365,
+      expiryInMinutes: 0.2,
     };
 
     // when
@@ -47,7 +35,7 @@ describe("nftfi", () => {
 
     // then
     expect(offer.platform).toBe(LendingPlatform.nftfi);
-    expect(offer.lender).toBe(account.address.toLowerCase() as `0x${string}`);
+    expect(offer.lender).toBe(TestConfig.addressFromPrivateKey.toLowerCase() as `0x${string}`);
     expect(offer.type).toBe(OfferType.collectionOffer);
     expect(offer.currency).toBe(params.currency);
     expect(offer.principal).toBe(params.principal);
@@ -57,21 +45,16 @@ describe("nftfi", () => {
   });
 
   // TODO for some reason the delete call is flaky with a 401
-  test.skip("it can delete an offer", async () => {
-    // cancel if no private key
-    if (privateKey === "0x") {
-      return;
-    }
-
+  test.skip("deleteOffer", async () => {
     // given
-    const client = new NftfiClient({ privateKey: privateKey, apiKey: apiKey });
+    const client = new NftfiClient({ privateKey: TestConfig.privateKey, apiKey: TestConfig.nftfiApiKey });
     const offer = await client.createCollectionOffer({
       collectionAddress: "0xed5af388653567af2f388e6224dc7c4b3241c544", // azuki
       currency: WETH,
-      principal: 0.1,
+      principal: 10 / 1e18,
       apr: 0.5,
-      durationInDays: 1,
-      expiryInMinutes: 5,
+      durationInDays: 365,
+      expiryInMinutes: 0.2,
     });
     const offers1 = await client.getMyOffers();
     expect(offers1.some((o) => o.id === offer.id)).toBeTrue();
@@ -84,23 +67,18 @@ describe("nftfi", () => {
     expect(offers2.some((o) => o.id === offer.id)).toBeFalse();
   });
 
-  test("it can get all active offers", async () => {
-    // cancel if no private key
-    if (privateKey === "0x") {
-      return;
-    }
-
+  test("getMyOffers", async () => {
     // given
-    const client = new NftfiClient({ privateKey: privateKey, apiKey: apiKey });
+    const client = new NftfiClient({ privateKey: TestConfig.privateKey, apiKey: TestConfig.nftfiApiKey });
 
     // when
     const offer = await client.createCollectionOffer({
       collectionAddress: "0xed5af388653567af2f388e6224dc7c4b3241c544", // azuki
       currency: WETH,
-      principal: 0.1,
+      principal: 10 / 1e18,
       apr: 0.5,
-      durationInDays: 1,
-      expiryInMinutes: 5,
+      durationInDays: 365,
+      expiryInMinutes: 0.2,
     });
     const offers = await client.getMyOffers();
 
@@ -108,14 +86,9 @@ describe("nftfi", () => {
     expect(offers.some((o) => o.id === offer.id)).toBeTrue();
   });
 
-  test("get promissory note", async () => {
-    // cancel if no private key
-    if (rpcUrl === "https://") {
-      return;
-    }
-
+  test("getPromissoryNote", async () => {
     // given
-    const client = new NftfiClient({ rpcUrl: rpcUrl });
+    const client = new NftfiClient({ rpcUrl: TestConfig.rpcUrl });
 
     // when
     const promissory = await client.getPromissoryNote(1);

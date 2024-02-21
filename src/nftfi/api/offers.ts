@@ -46,7 +46,7 @@ export default class Offers {
   }
 
   async delete(offerId: string) {
-    await this.http.delete(`/v0.1/offers/${offerId}`);
+    await this.http.delete(`/v0.2/offers/${offerId}`);
   }
 
   private async constructV2_3FixedCollectionOffer(options: NFTfiOfferParams) {
