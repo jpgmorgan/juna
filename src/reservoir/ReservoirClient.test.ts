@@ -3,7 +3,7 @@ import { describe, expect, test } from "bun:test";
 import { ReservoirClient } from "..";
 
 describe("reservoir", () => {
-  test("it can get quotes for a collection", async () => {
+  test("getQuotes", async () => {
     // given
     const reservoir = new ReservoirClient();
 

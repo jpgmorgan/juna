@@ -1,30 +1,25 @@
-import { describe, expect, test } from "bun:test";
+import { describe, test } from "bun:test";
 
 import { NftfiClient, ArcadeClient, PortfolioClient, Loaner, WETH, USDC } from "..";
+import { TestConfig } from "./config.test";
 
 describe("loaner", () => {
   // setup
-  //   const nftfiApiKey = process.env.NFTFI_API_KEY ?? "";
-  const nftfiApiKey = process.env.NFTFI_API_KEY ?? "";
-  const arcadeApiKey = process.env.ARCADE_API_KEY ?? "";
-  const privateKey = (process.env.PRIVATE_KEY ?? "0x") as `0x${string}`;
-
-  const nftfiClient = new NftfiClient({ apiKey: nftfiApiKey, privateKey: privateKey });
-  const arcadeClient = new ArcadeClient({ apiKey: arcadeApiKey, privateKey: privateKey });
+  const nftfiClient = new NftfiClient({ apiKey: TestConfig.nftfiApiKey, privateKey: TestConfig.privateKey });
+  const arcadeClient = new ArcadeClient({ apiKey: TestConfig.arcadeApiKey, privateKey: TestConfig.privateKey });
   const portfolio = new PortfolioClient([nftfiClient, arcadeClient], []);
   const loaner = new Loaner(portfolio);
 
-  test("it can get loans for the portfolio", async () => {
+  test("updateCollectionOffers", async () => {
     // when
     const loanTerms = [
-      { currency: WETH, ltv: 0.1, durationInDays: 10, apr: 0.12 },
-      { currency: WETH, ltv: 0.5, durationInDays: 10, apr: 0.12 },
-      { currency: USDC, ltv: 0.1, durationInDays: 10, apr: 0.12 },
+      { currency: WETH, principal: 0.1, durationInDays: 10, apr: 0.12 },
+      { currency: WETH, principal: 0.5, durationInDays: 10, apr: 0.12 },
+      { currency: USDC, principal: 0.1, durationInDays: 10, apr: 0.12 },
     ];
-    loaner.updateCollectionOffers("0xb7f7f6c52f2e2fdb1963eab30438024864c313f6", 1, 2200, loanTerms); // cryptopunks
-    await loaner.publishCollectionOffers(1);
+    loaner.updateCollectionOffers("0xb7f7f6c52f2e2fdb1963eab30438024864c313f6", loanTerms); // cryptopunks
+    await loaner.publishCollectionOffers(1, false);
 
     // then
-    // expect(loans).toBeArray();
-  });
+  }, 10000);
 });

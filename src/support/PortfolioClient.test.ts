@@ -2,25 +2,25 @@ import { describe, expect, test } from "bun:test";
 
 import { NftfiClient, ArcadeClient, PortfolioClient } from "..";
 import { BlurClient } from "..";
+import { TestConfig } from "./config.test";
 
 describe("portfolio client", () => {
   // setup
-  const nftfiApiKey = process.env.NFTFI_API_KEY ?? "";
-  const arcadeApiKey = process.env.ARCADE_API_KEY ?? "";
-  const address1 = process.env.ADDRESS1 as `0x${string}`;
-  const address2 = process.env.ADDRESS2 as `0x${string}`;
-
-  const nftfiClient = new NftfiClient({ apiKey: nftfiApiKey });
-  const arcadeClient = new ArcadeClient({ apiKey: arcadeApiKey });
+  const nftfiClient = new NftfiClient({ apiKey: TestConfig.nftfiApiKey });
+  const arcadeClient = new ArcadeClient({ apiKey: TestConfig.arcadeApiKey });
   const blurClient = new BlurClient({});
-  const portfolio = new PortfolioClient([nftfiClient, arcadeClient, blurClient], [address1, address2]);
+  const portfolio = new PortfolioClient(
+    [nftfiClient, arcadeClient],
+    [TestConfig.addressArcade, TestConfig.addressGondi, TestConfig.addressBlur],
+  );
 
-  test("it can get loans for the portfolio", async () => {
+  test("getMyLoans", async () => {
     // when
     const loans = await portfolio.getMyLoans();
     console.log(loans);
 
     // then
     expect(loans).toBeArray();
+    expect(loans).toBeGreaterThan(0);
   });
 });

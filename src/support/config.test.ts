@@ -8,8 +8,10 @@ export class TestConfig {
   static addressFromPrivateKey: `0x${string}` = privateKeyToAccount(this.privateKey).address;
 
   // API keys
-  static nftfiApiKey = process.env.NFTFI_API_KEY ?? "";
-  static arcadeApiKey = process.env.ARCADE_API_KEY ?? "4GmEpqEl9On8BREgrbHvP6sx9IteMxX7T1Y1JpMfXXLi2QADe";
+  static nftfiApiKey: string = process.env.NFTFI_API_KEY ?? "";
+  static arcadeApiKey: string = this.isPrivateKeyProvided
+    ? "4GmEpqEl9On8BREgrbHvP6sx9IteMxX7T1Y1JpMfXXLi2QADe"
+    : process.env.ARCADE_API_KEY ?? ""; // arcade api key is tied to an address
 
   // Addresses from lenders from which to be inspired
   static addressNftfi: `0x${string}` = "0xc0D5B6F1B40B458746bC5f0fea76C20670C1DE21";

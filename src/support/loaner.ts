@@ -18,25 +18,30 @@ export class Loaner {
     this.collectionOffers[collectionAddress] = loanTerms;
   }
 
-  public async publishCollectionOffers(expiryInMinutes: number = 10) {
+  public async publishCollectionOffers(expiryInMinutes: number = 10, logs: boolean = true) {
     for (const [collectionAddress, loanTerms] of Object.entries(this.collectionOffers)) {
       const collectionName = CollectionRegistry.getCollectionDetails(collectionAddress as `0x${string}`).name;
       for (const loanTerm of loanTerms) {
-        console.log(
-          `publishing collection offer on ${collectionName}: principal=${
-            loanTerm.principal
-          } ${loanTerm.currency.symbol.toLowerCase()} | duration=${loanTerm.durationInDays} days | apr=${
-            loanTerm.apr * 100
-          }%`,
+        if (logs) {
+          console.log(
+            `publishing collection offer on ${collectionName}: principal=${
+              loanTerm.principal
+            } ${loanTerm.currency.symbol.toLowerCase()} | duration=${loanTerm.durationInDays} days | apr=${
+              loanTerm.apr * 100
+            }%`,
+          );
+        }
+        await this.portfolioClient.createCollectionOffer(
+          {
+            collectionAddress: collectionAddress as `0x${string}`,
+            currency: loanTerm.currency,
+            principal: loanTerm.principal,
+            apr: loanTerm.apr,
+            durationInDays: loanTerm.durationInDays,
+            expiryInMinutes: expiryInMinutes,
+          },
+          logs,
         );
-        await this.portfolioClient.createCollectionOffer({
-          collectionAddress: collectionAddress as `0x${string}`,
-          currency: loanTerm.currency,
-          principal: loanTerm.principal,
-          apr: loanTerm.apr,
-          durationInDays: loanTerm.durationInDays,
-          expiryInMinutes: expiryInMinutes,
-        });
       }
     }
   }

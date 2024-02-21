@@ -9,14 +9,14 @@ export class PortfolioClient {
     this.addresses = addresses;
   }
 
-  public async createCollectionOffer(offerParams: CollectionOfferParams) {
+  public async createCollectionOffer(offerParams: CollectionOfferParams, logs: boolean = true) {
     const promises = [];
     for (const client of this.clients) {
       promises.push(
         client
           .createCollectionOffer(offerParams)
-          .then(() => console.log(`${client.constructor.name} ✓`))
-          .catch((error) => console.error(`${client.constructor.name} ${error}`)),
+          .then(() => (logs ? console.log(`${client.constructor.name} ✓`) : null))
+          .catch((error) => (logs ? console.error(`${client.constructor.name} ${error}`) : null)),
       );
     }
     await Promise.all(promises);
