@@ -18,6 +18,7 @@ describe("nftfi", () => {
     // then
     expect(loans).toBeArray();
     expect(loans.length).toBeGreaterThan(0);
+    // TODO: test type of records within the array
   });
 
   test("createCollectionOffer", async () => {
