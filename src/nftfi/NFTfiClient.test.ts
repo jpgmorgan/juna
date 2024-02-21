@@ -13,7 +13,7 @@ describe("nftfi", () => {
     const client = new NftfiClient({ apiKey: TestConfig.nftfiApiKey });
 
     // when
-    const loans = await client.getLoansForAccount(TestConfig.addressFromLender1);
+    const loans = await client.getLoansForAccount(TestConfig.addressNftfi);
 
     // then
     expect(loans).toBeArray();

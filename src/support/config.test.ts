@@ -11,8 +11,8 @@ export class TestConfig {
   static arcadeApiKey = process.env.ARCADE_API_KEY ?? "";
 
   // Addresses from lender from which to be inspired
-  static addressFromLender1: `0x${string}` = (process.env.ADDRESS1 ??
-    "0xe125A055afE10ADB508aB87cB6dbe1DCD702B0e9") as `0x${string}`;
+  static addressNftfi: `0x${string}` = (process.env.ADDRESS1 ??
+    "0xD79b937791724e47F193f67162B92cDFbF7ABDFd") as `0x${string}`;
   static addressFromLender2: `0x${string}` = (process.env.ADDRESS2 ?? "0x") as `0x${string}`;
 
   // RPC url
