@@ -1,7 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { NftfiClient, ArcadeClient, PortfolioClient } from "..";
-import { BlurClient } from "..";
+import { NftfiClient, ArcadeClient, GondiClient, BlurClient, PortfolioClient } from "..";
 import { TestConfig } from "./config.test";
 
 describe("portfolio client", () => {
@@ -9,18 +8,18 @@ describe("portfolio client", () => {
   const nftfiClient = new NftfiClient({ apiKey: TestConfig.nftfiApiKey });
   const arcadeClient = new ArcadeClient({ apiKey: TestConfig.arcadeApiKey });
   const blurClient = new BlurClient({});
+  const gondiClient = new GondiClient({});
   const portfolio = new PortfolioClient(
-    [nftfiClient, arcadeClient],
+    [nftfiClient, arcadeClient, gondiClient],
     [TestConfig.addressArcade, TestConfig.addressGondi, TestConfig.addressBlur],
   );
 
   test("getMyLoans", async () => {
     // when
     const loans = await portfolio.getMyLoans();
-    console.log(loans);
 
     // then
     expect(loans).toBeArray();
-    expect(loans).toBeGreaterThan(0);
-  });
+    expect(loans.length).toBeGreaterThan(0);
+  }, 10000);
 });
