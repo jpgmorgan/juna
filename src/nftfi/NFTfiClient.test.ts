@@ -8,7 +8,9 @@ import { LendingPlatform, CollectionOfferParams, OfferType } from "../types";
 import { AccountUnderfunded } from "../errors";
 
 describe("nftfi", () => {
-  test("getLoansForAccount", async () => {
+  const privateKeyTest = TestConfig.isPrivateKeyProvided ? test.skip : test;
+
+  test("getLoansForAccount:getMultipleLoans", async () => {
     // given
     const client = new NftfiClient({ apiKey: TestConfig.nftfiApiKey });
 
@@ -21,7 +23,19 @@ describe("nftfi", () => {
     // TODO: test type of records within the array
   });
 
-  test("createCollectionOffer", async () => {
+  test("getLoansForAccount:getNoLoans", async () => {
+    // given
+    const client = new NftfiClient({ apiKey: TestConfig.nftfiApiKey });
+
+    // when
+    const loans = await client.getLoansForAccount("0x0000000000000000000000000000000000000000");
+
+    // then
+    expect(loans).toBeArray();
+    expect(loans.length).toBe(0);
+  });
+
+  privateKeyTest("createCollectionOffer", async () => {
     // given
     const client = new NftfiClient({ privateKey: TestConfig.privateKey, apiKey: TestConfig.nftfiApiKey });
     const params: CollectionOfferParams = {
@@ -91,7 +105,7 @@ describe("nftfi", () => {
     expect(offers2.some((o) => o.id === offer.id)).toBeFalse();
   });
 
-  test("getMyOffers", async () => {
+  privateKeyTest("getMyOffers", async () => {
     // given
     const client = new NftfiClient({ privateKey: TestConfig.privateKey, apiKey: TestConfig.nftfiApiKey });
 

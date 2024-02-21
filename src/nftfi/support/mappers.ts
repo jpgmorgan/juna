@@ -3,7 +3,7 @@ import { currencyFromAddress } from "../../support/currencies";
 import { NFTfiLoan, NFTfiOffer } from "./types";
 import { addDaysToDate, calculateDurationInDays } from "../../helpers";
 import { CollectionRegistry } from "../../support/CollectionRegistry";
-import { AccountUnderfunded } from "../../errors";
+import { AccountUnderfunded, UnsufficientAllowance } from "../../errors";
 
 const nftfiStatusMapper = (status: string): LoanStatus => {
   switch (status) {
@@ -85,6 +85,8 @@ export const mapError = (error: any) => {
   switch (errorMessage) {
     case `{"terms.loan.principal":["principal is greater than available funds in lender account"]}`:
       return new AccountUnderfunded();
+    case `{"terms.loan.principal":["principal is greater than approved allowance on lender account"]}`:
+      return new UnsufficientAllowance();
     default:
       return Error(errorMessage);
   }
