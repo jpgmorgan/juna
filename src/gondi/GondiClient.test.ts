@@ -17,7 +17,7 @@ describe("gondi", () => {
 
     // then
     expect(loans).toBeArray();
-    expect(loans.length).toBeGreaterThan(0);
+    expect(loans.length).toBeGreaterThanOrEqual(5);
     // TODO: test type of records within the array
   });
 
