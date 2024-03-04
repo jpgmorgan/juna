@@ -100,6 +100,7 @@ export interface CollectionOfferParams {
   apr: number;
   durationInDays: number;
   expiryInMinutes: number;
+  lenderAddress?: `0x${string}`;
 }
 
 export interface SingleItemOfferParams extends CollectionOfferParams {

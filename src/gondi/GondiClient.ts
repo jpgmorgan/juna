@@ -101,6 +101,7 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
       expirationTime: BigInt(nowPlusOffset(offerParams.expiryInMinutes)),
       duration: BigInt(Math.round(offerParams.durationInDays * 24 * 3600)),
       requiresLiquidation: false, // Sets the collateral to be liquidated on default.
+      lenderAddress: offerParams.lenderAddress ?? this.account.address,
       // borrowerAddress: null, // Optional: allow only this borrower to accept the offer.
     };
     return await this.offers
