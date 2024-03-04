@@ -28,6 +28,7 @@ export interface LendingClientParameters {
   apiKey?: string;
   privateKey?: `0x${string}`;
   rpcUrl?: `https://${string}`;
+  testnet?: boolean;
 }
 
 export enum LendingPlatform {
