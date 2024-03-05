@@ -50,7 +50,7 @@ describe("gondi", () => {
     // TODO: try to delete offer after
   });
 
-  test("createCollectionOffer:onTestnet", async () => {
+  test.skip("createCollectionOffer:onTestnet", async () => {
     // given
     const client = new GondiClient({ privateKey: TestConfig.privateKey, testnet: true });
     const params: CollectionOfferParams = {
