@@ -50,6 +50,23 @@ describe("gondi", () => {
     // TODO: try to delete offer after
   });
 
+  test("createCollectionOffer:onTestnet", async () => {
+    // given
+    const client = new GondiClient({ privateKey: TestConfig.privateKey, testnet: true });
+    const params: CollectionOfferParams = {
+      collectionAddress: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D", // azuki
+      currency: WETH,
+      principal: 0.1,
+      apr: 0.5,
+      durationInDays: 1,
+      expiryInMinutes: 5,
+    };
+
+    // when
+    const offer = await client.createCollectionOffer(params);
+    // TODO: try to delete offer after
+  });
+
   test("createCollectionOffer:CollectionNotSupported", async () => {
     // given
     const client = new GondiClient({ privateKey: TestConfig.privateKey });
