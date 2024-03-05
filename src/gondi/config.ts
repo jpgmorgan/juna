@@ -1,11 +1,11 @@
-import { defineChain } from "viem";
+import { defineChain, Chain } from "viem";
 
 export const gondiConfig = {
   baseUrl: "https://api.gondi.xyz/lending/",
   rpcTestnet: "https://dev.floridast.xyz/rpc",
 };
 
-export const testChain = defineChain({
+export const testChain: Chain = defineChain({
   id: 31337,
   name: "GondiChain",
   network: "GondiChain",

@@ -46,7 +46,7 @@ describe("gondi", () => {
     };
 
     // when
-    const offer = await client.createCollectionOffer(params);
+    await client.createCollectionOffer(params);
     // TODO: try to delete offer after
   });
 
@@ -63,7 +63,7 @@ describe("gondi", () => {
     };
 
     // when
-    const offer = await client.createCollectionOffer(params);
+    await client.createCollectionOffer(params);
     // TODO: try to delete offer after
   });
 
