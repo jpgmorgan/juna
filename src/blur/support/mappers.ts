@@ -1,6 +1,6 @@
 import { WETH } from "../..";
 import { BlurLoan } from "./types";
-import { Offer, Loan, LendingPlatform, OfferType, LoanStatus } from "../../types";
+import { Loan, LendingPlatform, LoanStatus } from "../../types";
 import { CollectionRegistry } from "../../support/CollectionRegistry";
 
 export const blurLoanMapper = (blurLoan: BlurLoan): Loan => {
@@ -9,11 +9,7 @@ export const blurLoanMapper = (blurLoan: BlurLoan): Loan => {
     platform: LendingPlatform.blur,
     borrower: blurLoan.lien.borrower.address,
     lender: blurLoan.lien.lender.address,
-    status: blurLoan.lien.repaidAt
-      ? LoanStatus.repaid
-      : blurLoan.lien.auctionStartedAt
-      ? LoanStatus.liquidated
-      : LoanStatus.ongoing,
+    status: blurLoan.lien.repaidAt ? LoanStatus.repaid : LoanStatus.ongoing,
     startDate: new Date(blurLoan.lien.createdAt),
     endDate: new Date(blurLoan.lien.createdAt),
     currency: WETH,

@@ -10,7 +10,6 @@ describe("blur", () => {
     // given
     // when
     const loans = await client.getLoansForAccount(TestConfig.addressBlur);
-    console.log(loans.length);
 
     // then
     expect(loans).toBeArray();
