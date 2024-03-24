@@ -97,6 +97,14 @@ export const defaultRegistry: Collections = {
     address: "0xd4e4078ca3495de5b1d4db434bebc5a986197782",
     name: "Autoglyphs",
   },
+  "0x364c828ee171616a39897688a831c2499ad972ec": {
+    address: "0x364c828ee171616a39897688a831c2499ad972ec",
+    name: "Sappy Seals",
+  },
+  "0x036721e5a769cc48b3189efbb9cce4471e8a48b1": {
+    address: "0x036721e5a769cc48b3189efbb9cce4471e8a48b1",
+    name: "Checks - VV Originals",
+  },
 };
 
 export class CollectionRegistry {
