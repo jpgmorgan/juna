@@ -7,7 +7,6 @@ describe("portfolio client", () => {
   // setup
   const nftfiClient = new NftfiClient({ apiKey: TestConfig.nftfiApiKey });
   const arcadeClient = new ArcadeClient({ apiKey: TestConfig.arcadeApiKey });
-  const blurClient = new BlurClient({});
   const gondiClient = new GondiClient({});
   const portfolio = new PortfolioClient(
     [nftfiClient, arcadeClient, gondiClient],

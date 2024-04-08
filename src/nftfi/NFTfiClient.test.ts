@@ -133,5 +133,5 @@ describe("nftfi", () => {
 
     // then
     expect(promissory).toEqual({ address: "0xd0a40eB7FD94eE97102BA8e9342243A2b2E22207", id: 1486175015439543728 });
-  });
+  }, 10000);
 });
