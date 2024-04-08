@@ -65,8 +65,12 @@ export class ArcadeClient implements LendingClientWithPromissoryNotes {
   }
 
   public async createSingleItemOffer(offerParams: SingleItemOfferParams): Promise<Offer> {
-    console.log(offerParams);
-    throw Error("Not implemented");
+    return await this.offers
+      .create(offerParams)
+      .then((res) => arcadeOfferMapper(res))
+      .catch((error) => {
+        throw Error(error); // TODO: error mapping
+      });
   }
 
   public async createCollectionOffer(offerParams: CollectionOfferParams): Promise<Offer> {

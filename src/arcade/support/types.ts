@@ -88,7 +88,9 @@ export interface ArcadeOffer {
   affiliateCode: `0x${string}`;
 }
 
-export interface ArcadeOfferParams extends CollectionOfferParams {}
+export interface ArcadeOfferParams extends CollectionOfferParams {
+  nftId?: number;
+}
 
 export interface ItemsPayload {
   durationSecs: number;

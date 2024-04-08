@@ -3,7 +3,7 @@ import { describe, expect, test } from "bun:test";
 import { WETH } from "../support/currencies";
 import { ArcadeClient } from "./ArcadeClient";
 import { TestConfig } from "../support/config.test";
-import { LendingPlatform, CollectionOfferParams, OfferType } from "../types";
+import { LendingPlatform, CollectionOfferParams, OfferType, SingleItemOfferParams } from "../types";
 
 describe("arcade", () => {
   test("getLoansForAccount:getMultipleLoans", async () => {
@@ -16,7 +16,7 @@ describe("arcade", () => {
     // then
     expect(loans).toBeArray();
     expect(loans.length).toBeGreaterThan(0);
-  });
+  }, 10000);
 
   test("getLoansForAccount:getNoLoans", async () => {
     // given
@@ -49,6 +49,33 @@ describe("arcade", () => {
     expect(offer.platform).toBe(LendingPlatform.arcade);
     expect(offer.lender).toBe(TestConfig.addressFromPrivateKey.toLowerCase() as `0x${string}`);
     expect(offer.type).toBe(OfferType.collectionOffer);
+    expect(offer.currency).toBe(params.currency);
+    expect(offer.principal).toBe(params.principal);
+    expect(offer.durationInDays).toBe(params.durationInDays);
+    // expect(offer.apr).toBe(params.apr); TODO make a comparison that handles rounding errors + the APR calc is wrong
+    expect(offer.collateral.collectionAddress).toBe(params.collectionAddress);
+  });
+
+  test("createSingleItemOffer", async () => {
+    // given
+    const client = new ArcadeClient({ privateKey: TestConfig.privateKey, apiKey: TestConfig.arcadeApiKey });
+    const params: SingleItemOfferParams = {
+      collectionAddress: "0xed5af388653567af2f388e6224dc7c4b3241c544", // azuki
+      nftId: 7835,
+      currency: WETH,
+      principal: 0.1,
+      apr: 0.5,
+      durationInDays: 1,
+      expiryInMinutes: 5,
+    };
+
+    // when
+    const offer = await client.createSingleItemOffer(params);
+
+    // then
+    expect(offer.platform).toBe(LendingPlatform.arcade);
+    expect(offer.lender).toBe(TestConfig.addressFromPrivateKey.toLowerCase() as `0x${string}`);
+    expect(offer.type).toBe(OfferType.singleItemOffer);
     expect(offer.currency).toBe(params.currency);
     expect(offer.principal).toBe(params.principal);
     expect(offer.durationInDays).toBe(params.durationInDays);

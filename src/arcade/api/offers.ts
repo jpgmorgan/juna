@@ -66,7 +66,7 @@ export default class Offers {
       proratedInterestRate: BigInt(Math.floor(((apr * durationInDays) / 365.25) * 10000)) * BigInt(1e18),
       principal: BigInt(Math.floor(principal * 10000)) * BigInt(1e14),
       collateralAddress: offerParams.collectionAddress.toLowerCase(),
-      collateralId: "-1",
+      collateralId: offerParams.nftId === undefined ? "-1" : (offerParams.nftId?.toString() as string),
       payableCurrency: currency.address,
       deadline: this.getExpiry(offerParams.expiryInMinutes * 60),
       affiliateCode: pad("0x0"),
@@ -96,7 +96,7 @@ export default class Offers {
         },
       }),
       nonce: nonce.toString(),
-      kind: "collection",
+      kind: offerParams.nftId === undefined ? "collection" : "asset",
       collectionId: offerParams.collectionAddress.toLowerCase(),
       itemPredicates: [predicate],
     };
