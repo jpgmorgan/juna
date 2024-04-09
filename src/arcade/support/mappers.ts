@@ -52,7 +52,7 @@ export const arcadeOfferMapper = (arcadeOffer: ArcadeOffer): Offer => {
     platform: LendingPlatform.arcade,
     lender: arcadeOffer.creatorId,
     offerDate: new Date(arcadeOffer.createdAt),
-    expiryDate: addDaysToDate(new Date(arcadeOffer.createdAt), durationInDays),
+    expiryDate: new Date(arcadeOffer.expiresAt),
     type: arcadeOffer.collateralId === "-1" ? OfferType.collectionOffer : OfferType.singleItemOffer,
     currency: currency,
     principal: parseFloat(arcadeOffer.principal) / 10 ** currency.decimals,
