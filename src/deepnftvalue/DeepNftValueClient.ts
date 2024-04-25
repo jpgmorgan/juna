@@ -34,10 +34,14 @@ export class DeepNftValueClient {
         },
       });
 
-      return parseFloat(response.data.results[0].price);
+      if (response.data.results[0] !== undefined) {
+        return parseFloat(response.data.results[0].price);
+      } else {
+        return 0;
+      }
     } catch (error) {
       console.error("Error fetching NFT value:", error);
-      throw error;
+      return 0;
     }
   }
 }
