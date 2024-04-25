@@ -46,7 +46,7 @@ export const gondiLoanMapper = (gondiLoan: GondiLoan): Loan => {
         collectionName: CollectionRegistry.getCollectionDetails(
           gondiLoan.loan.nft.collection.contractData.contractAddress.toLowerCase() as `0x${string}`,
         ).name,
-        nftId: parseInt(gondiLoan.loan.nft.id),
+        nftId: parseInt(gondiLoan.loan.nft.tokenId),
       },
     ],
   };
