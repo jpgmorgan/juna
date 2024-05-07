@@ -42,4 +42,17 @@ export class ReservoirClient {
       },
     };
   }
+
+  public async getActivity(collection: string, attributes: string, continuation: string) {
+    const url = `/collections/activity/v6`;
+    const response = await this.axiosInstance.get(url, {
+      params: {
+        collection,
+        // attributes,
+        // continuation,
+      },
+    });
+
+    return response.data;
+  }
 }

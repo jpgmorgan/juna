@@ -13,4 +13,16 @@ describe("reservoir", () => {
     // then
     expect(quotes).toMatchObject({ bid: {}, ask: {} });
   });
+
+  test("getActivity", async () => {
+    // given
+    const reservoir = new ReservoirClient();
+
+    // when
+    const quotes = await reservoir.getActivity("0xb7F7F6C52F2e2fdb1963Eab30438024864c313F6", "", ""); // wrapped-cryptopunks
+
+    // then
+    console.log(quotes);
+    // expect(quotes).toMatchObject({ bid: {}, ask: {} });
+  });
 });
