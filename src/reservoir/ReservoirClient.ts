@@ -48,8 +48,8 @@ export class ReservoirClient {
     const response = await this.axiosInstance.get(url, {
       params: {
         collection,
-        // attributes,
-        // continuation,
+        attributes,
+        continuation,
       },
     });
 
