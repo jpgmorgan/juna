@@ -12,6 +12,7 @@ export interface GondiLoan {
     principalAmount: string;
     principalAddress: string;
     status: string;
+    borrowerAddress: string;
     currency: {
       symbol: string;
       decimals: number;

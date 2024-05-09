@@ -28,7 +28,7 @@ export const gondiLoanMapper = (gondiLoan: GondiLoan): Loan => {
   return {
     id: gondiLoan.id,
     platform: LendingPlatform.gondi,
-    borrower: gondiLoan.loan.nft.owner.toLowerCase() as `0x${string}`,
+    borrower: (gondiLoan.loan.borrowerAddress ?? gondiLoan.loan.nft.owner).toLowerCase() as `0x${string}`,
     lender: gondiLoan.lenderAddress.toLowerCase() as `0x${string}`,
     status: gondiStatusMapper(gondiLoan.loan.status, gondiLoan.__typename),
     startDate: new Date(gondiLoan.startTime),

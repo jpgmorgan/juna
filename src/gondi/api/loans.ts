@@ -23,11 +23,15 @@ export default class Loans {
     this.http = http;
   }
 
-  public async getSources(address: `0x${string}`, after: string | null): Promise<SourceData> {
+  public async getSources(
+    addresses: `0x${string}`[] = [],
+    after: string | null = "",
+    includeRefinancedLoans: boolean = true,
+  ): Promise<SourceData> {
     const payload = {
       operationName: "ListSources",
       variables: {
-        lenders: [address],
+        lenders: addresses,
         statuses: [
           "LOAN_INITIATED",
           "LOAN_DEFAULTED",
@@ -36,8 +40,8 @@ export default class Loans {
           "LOAN_FORECLOSED",
           "LOAN_REPAID",
         ],
-        sortBy: { field: "PRINCIPAL_AMOUNT", order: "DESC" },
-        includeLost: true,
+        sortBy: { field: "START_TIME", order: "DESC" },
+        includeLost: includeRefinancedLoans,
         first: 20,
         terms: {},
         currencyAddress: null,
@@ -49,12 +53,12 @@ export default class Loans {
     return (await this.http.post("graphql?operation=ListSources", payload)).data.data.sources;
   }
 
-  public async get(address: `0x${string}`): Promise<GondiLoan[]> {
+  public async get(addresses: `0x${string}`[], includeRefinancedLoans: boolean): Promise<GondiLoan[]> {
     let after: string | null = "";
     let hasNextPage: boolean = false;
     let loans: LoanEdge[] = [];
     do {
-      const sources = await this.getSources(address, after);
+      const sources = await this.getSources(addresses, after, includeRefinancedLoans);
       loans = loans.concat(sources.edges);
       after = sources.pageInfo.endCursor;
       hasNextPage = sources.pageInfo.hasNextPage;

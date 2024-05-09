@@ -69,7 +69,7 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
   }
 
   public async getLoans(): Promise<Loan[]> {
-    throw Error("Not implemented");
+    return await this.loans.get([], false).then((res) => res.map(gondiLoanMapper));
   }
 
   public async getLoansForCollection(address: `0x${string}`): Promise<Loan[]> {
@@ -78,7 +78,7 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
   }
 
   public async getLoansForAccount(address: `0x${string}`): Promise<Loan[]> {
-    return await this.loans.get(address).then((res) => res.map(gondiLoanMapper));
+    return await this.loans.get([address], true).then((res) => res.map(gondiLoanMapper));
   }
 
   public async getMyLoans(): Promise<Loan[]> {
