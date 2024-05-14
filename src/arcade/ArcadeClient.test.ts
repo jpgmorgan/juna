@@ -16,7 +16,7 @@ describe("arcade", () => {
     // then
     expect(loans).toBeArray();
     expect(loans.length).toBeGreaterThan(0);
-  });
+  }, 20000);
 
   test("getLoansForAccount:getMultipleLoans", async () => {
     // given

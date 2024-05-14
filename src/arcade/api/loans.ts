@@ -21,10 +21,8 @@ export default class Loans {
     const allLoans: ArcadeLoan[] = [];
 
     do {
-      console.log(params);
       const response = await this.http.get("/loans", { params });
-      console.log(response.data);
-      params.cursor = response.data[-1].cursor;
+      params.cursor = response.data[response.data.length - 1].cursor;
       allLoans.push(...response.data);
     } while (params.cursor !== 1);
 
