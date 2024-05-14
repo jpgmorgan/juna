@@ -28,6 +28,7 @@ export interface LendingClientParameters {
   apiKey?: string;
   privateKey?: `0x${string}`;
   rpcUrl?: `https://${string}`;
+  testnet?: boolean;
 }
 
 export enum LendingPlatform {
@@ -100,6 +101,7 @@ export interface CollectionOfferParams {
   apr: number;
   durationInDays: number;
   expiryInMinutes: number;
+  lenderAddress?: `0x${string}`;
 }
 
 export interface SingleItemOfferParams extends CollectionOfferParams {

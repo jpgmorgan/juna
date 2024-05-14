@@ -15,4 +15,17 @@ export default class Loans {
   public async get(address: `0x${string}`): Promise<ArcadeLoan[]> {
     return await this.http.get(`/accounts/${address}/loans`).then((res) => res.data);
   }
+
+  public async getAll(): Promise<ArcadeLoan[]> {
+    const params: { cursor?: number } = {};
+    const allLoans: ArcadeLoan[] = [];
+
+    do {
+      const response = await this.http.get("/loans", { params });
+      params.cursor = response.data[response.data.length - 1].cursor;
+      allLoans.push(...response.data);
+    } while (params.cursor !== 1);
+
+    return allLoans;
+  }
 }

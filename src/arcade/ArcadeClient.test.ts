@@ -6,6 +6,18 @@ import { TestConfig } from "../support/config.test";
 import { LendingPlatform, CollectionOfferParams, OfferType, SingleItemOfferParams } from "../types";
 
 describe("arcade", () => {
+  test("getLoans", async () => {
+    // given
+    const client = new ArcadeClient({});
+
+    // when
+    const loans = await client.getLoans();
+
+    // then
+    expect(loans).toBeArray();
+    expect(loans.length).toBeGreaterThan(0);
+  }, 20000);
+
   test("getLoansForAccount:getMultipleLoans", async () => {
     // given
     const client = new ArcadeClient({});

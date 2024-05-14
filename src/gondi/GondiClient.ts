@@ -1,4 +1,5 @@
 import { Gondi } from "gondi";
+import { gondiConfig, testChain } from "./config";
 import axios, { AxiosInstance } from "axios";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { PrivateKeyAccount, createWalletClient, http } from "viem";
@@ -34,13 +35,13 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
   constructor(p: LendingClientParameters) {
     this.account = privateKeyToAccount(p.privateKey ?? generatePrivateKey());
     this.http = axios.create({
-      baseURL: "https://api.gondi.xyz/lending/",
+      baseURL: gondiConfig.baseUrl,
     });
 
     const wallet = createWalletClient({
       account: privateKeyToAccount(p.privateKey ?? generatePrivateKey()),
-      transport: http(),
-      chain: mainnet,
+      transport: p.testnet ? http(gondiConfig.rpcTestnet) : http(),
+      chain: p.testnet ? testChain : mainnet,
     });
     this.client = new Gondi({ wallet });
 
@@ -101,6 +102,7 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
       expirationTime: BigInt(nowPlusOffset(offerParams.expiryInMinutes)),
       duration: BigInt(Math.round(offerParams.durationInDays * 24 * 3600)),
       requiresLiquidation: false, // Sets the collateral to be liquidated on default.
+      lenderAddress: offerParams.lenderAddress ?? this.account.address,
       // borrowerAddress: null, // Optional: allow only this borrower to accept the offer.
     };
     return await this.offers

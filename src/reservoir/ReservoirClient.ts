@@ -31,14 +31,18 @@ export class ReservoirClient {
         params: { id: collectionAddress },
       })
       .then((response) => response.data);
+
+    const bidPrice = response.collections[0].topBid.price || response.collections[0].floorAsk.price;
+    const askPrice = response.collections[0].floorAsk.price || response.collections[0].topBid.price;
+
     return {
       bid: {
-        eth: response.collections[0].topBid.price.amount.native,
-        usd: response.collections[0].topBid.price.amount.usd,
+        eth: bidPrice.amount.native,
+        usd: bidPrice.amount.usd,
       },
       ask: {
-        eth: response.collections[0].floorAsk.price.amount.native,
-        usd: response.collections[0].floorAsk.price.amount.usd,
+        eth: askPrice.amount.native,
+        usd: askPrice.amount.usd,
       },
     };
   }
