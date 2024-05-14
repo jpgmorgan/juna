@@ -3,6 +3,7 @@ export { ArcadeClient } from "./arcade/ArcadeClient";
 export { NftfiClient } from "./nftfi/NFTfiClient";
 export { GondiClient } from "./gondi/GondiClient";
 export { BlurClient } from "./blur/BlurClient";
+export { DeepNftValueClient } from "./deepnftvalue/DeepNftValueClient";
 export { ReservoirClient } from "./reservoir/ReservoirClient";
 export { PortfolioClient } from "./support/PortfolioClient";
 export { Loaner } from "./support/loaner";

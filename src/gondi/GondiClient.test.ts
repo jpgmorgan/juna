@@ -8,6 +8,21 @@ import { CollectionNotSupported } from "../errors";
 import { TestConfig } from "../support/config.test";
 
 describe("gondi", () => {
+  test("getLoans", async () => {
+    // given
+    const client = new GondiClient({});
+
+    // when
+    const loans = await client.getLoans();
+
+    // then
+    // console.log(loans);
+    // console.log(loans.length);
+    expect(loans).toBeArray();
+    expect(loans.length).toBeGreaterThanOrEqual(985);
+    // // TODO: test type of records within the array
+  }, 50000);
+
   test("getLoansForAccount:getMultipleLoans", async () => {
     // given
     const client = new GondiClient({});
