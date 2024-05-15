@@ -7,6 +7,8 @@ import { AccountUnderfunded, UnsufficientAllowance } from "../../errors";
 
 const nftfiStatusMapper = (status: string): LoanStatus => {
   switch (status) {
+    case "active":
+      return LoanStatus.ongoing;
     case "escrow":
       return LoanStatus.ongoing;
     case "repaid":

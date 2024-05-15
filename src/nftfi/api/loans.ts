@@ -32,28 +32,28 @@ export default class Loans {
 
   public async getAll() {
     const limit = 100;
-    let page = 1;
-    let totalPages = 1;
     let allLoans: NFTfiLoan[] = [];
 
-    while (page <= 2) {
-      console.log(page);
-      const data = (
-        await this.http.get("/v0.2/loans", {
-          params: { status: "repaid", page: page, limit: limit },
-        })
-      ).data;
+    for (const status of ["active", "repaid", "liquidated", "defaulted"]) {
+      let page = 1;
+      let totalPages = 1;
+      while (page <= totalPages) {
+        const data = (
+          await this.http.get("/v0.2/loans", {
+            params: { status: status, page: page, limit: limit },
+          })
+        ).data;
 
-      allLoans = allLoans.concat(data.results);
-      console.log(data.results.length);
+        allLoans = allLoans.concat(data.results);
 
-      if (page === 1) {
-        // Calculate total pages only once using total count from the first page
-        const totalLoans = data.pagination.total;
-        totalPages = Math.ceil(totalLoans / limit);
+        if (page === 1) {
+          // Calculate total pages only once using total count from the first page
+          const totalLoans = data.pagination.total;
+          totalPages = Math.ceil(totalLoans / limit);
+        }
+
+        page++;
       }
-
-      page++;
     }
 
     console.log(`Fetched ${allLoans.length} loans.`);
