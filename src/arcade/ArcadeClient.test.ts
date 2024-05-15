@@ -14,6 +14,7 @@ describe("arcade", () => {
     const loans = await client.getLoans();
 
     // then
+    // console.log(loans);
     expect(loans).toBeArray();
     expect(loans.length).toBeGreaterThan(0);
   }, 20000);

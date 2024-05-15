@@ -31,7 +31,7 @@ export default class Loans {
     const payload = {
       operationName: "ListSources",
       variables: {
-        lenders: [address],
+        lenders: addresses,
         statuses: [
           "LOAN_INITIATED",
           "LOAN_DEFAULTED",

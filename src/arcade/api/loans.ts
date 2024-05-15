@@ -17,14 +17,15 @@ export default class Loans {
   }
 
   public async getAll(): Promise<ArcadeLoan[]> {
-    const params: { cursor?: number } = {};
     const allLoans: ArcadeLoan[] = [];
+    let cursor = 1000000000;
 
     do {
-      const response = await this.http.get("/loans", { params });
-      params.cursor = response.data[response.data.length - 1].cursor;
-      allLoans.push(...response.data);
-    } while (params.cursor !== 1);
+      const response = await fetch(`https://api-v2.arcade.xyz/api/v2/loans?cursor=${cursor}`);
+      const data = (await response.json()) as ArcadeLoan[];
+      cursor = data[data.length - 1].cursor;
+      allLoans.push(...data);
+    } while (cursor !== 1);
 
     return allLoans;
   }
