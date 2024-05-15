@@ -50,7 +50,7 @@ export class NftfiClient implements LendingClient {
   }
 
   public async getLoans(): Promise<Loan[]> {
-    throw Error("Not implemented");
+    return await this.loans.getAll().then((res) => res.map((o) => nftfiLoanMapper(o)));
   }
 
   public async getLoansForCollection(address: `0x${string}`): Promise<Loan[]> {

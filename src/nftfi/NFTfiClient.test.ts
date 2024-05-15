@@ -10,6 +10,20 @@ import { AccountUnderfunded } from "../errors";
 describe("nftfi", () => {
   const privateKeyTest = TestConfig.isPrivateKeyProvided ? test.skip : test;
 
+  test.skip("getLoans", async () => {
+    // given
+    const client = new NftfiClient({ apiKey: TestConfig.nftfiApiKey });
+
+    // when
+    const loans = await client.getLoans();
+
+    // then
+    // console.log(loans);
+    expect(loans).toBeArray();
+    expect(loans.length).toBeGreaterThan(0);
+    // TODO: test type of records within the array
+  }, 30000);
+
   test("getLoansForAccount:getMultipleLoans", async () => {
     // given
     const client = new NftfiClient({ apiKey: TestConfig.nftfiApiKey });

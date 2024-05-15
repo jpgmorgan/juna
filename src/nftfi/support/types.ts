@@ -30,6 +30,9 @@ export interface NFTfiLoan {
   borrower: {
     address: `0x${string}`;
   };
+  lender: {
+    address: `0x${string}`;
+  };
   terms: {
     loan: {
       duration: number;

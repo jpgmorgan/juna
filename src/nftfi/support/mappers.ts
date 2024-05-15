@@ -22,14 +22,14 @@ const nftfiStatusMapper = (status: string): LoanStatus => {
   }
 };
 
-export const nftfiLoanMapper = (nftfiLoan: NFTfiLoan, lender: `0x${string}`): Loan => {
+export const nftfiLoanMapper = (nftfiLoan: NFTfiLoan, lender?: `0x${string}`): Loan => {
   const currency = currencyFromAddress(nftfiLoan.terms.loan.currency);
   const durationInDays = calculateDurationInDays(nftfiLoan.terms.loan.duration);
   return {
     id: nftfiLoan.id.toString(),
     platform: LendingPlatform.nftfi,
     borrower: nftfiLoan.borrower.address,
-    lender: lender.toLowerCase() as `0x${string}`,
+    lender: lender ?? nftfiLoan.lender.address,
     status: nftfiStatusMapper(nftfiLoan.status),
     startDate: new Date(nftfiLoan.date.started),
     endDate: nftfiLoan.date.repaid
