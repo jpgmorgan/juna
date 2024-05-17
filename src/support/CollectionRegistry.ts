@@ -59,7 +59,11 @@ export const defaultRegistry: Collections = {
   },
   "0xb7f7f6c52f2e2fdb1963eab30438024864c313f6": {
     address: "0xb7f7f6c52f2e2fdb1963eab30438024864c313f6",
-    name: "Wrapped Cryptopunks",
+    name: "Cryptopunks",
+  },
+  "0x000000000000003607fce1ac9e043a86675c5c2f": {
+    address: "0x000000000000003607fce1ac9e043a86675c5c2f",
+    name: "Cryptopunks",
   },
   "0x3bf2922f4520a8ba0c2efc3d2a1539678dad5e9d": {
     address: "0x3bf2922f4520a8ba0c2efc3d2a1539678dad5e9d",
