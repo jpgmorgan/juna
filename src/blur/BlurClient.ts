@@ -50,8 +50,13 @@ export class BlurClient implements LendingClientWithPromissoryNotes {
   }
 
   public async createCollectionOffer(offerParams: CollectionOfferParams): Promise<Offer> {
-    console.log(offerParams);
-    throw Error("Not implemented");
+    return await this.api.postLoanOffer(
+      offerParams.collectionAddress,
+      offerParams.principal,
+      offerParams.limit ?? offerParams.principal,
+      offerParams.apr,
+      offerParams.expiryInMinutes,
+    );
   }
 
   public async deleteOffer(offerId: string): Promise<void> {

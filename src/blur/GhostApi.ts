@@ -4,6 +4,8 @@ import { Page, Browser } from "puppeteer";
 import { PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { BlurLoan, BlurOffer } from "./support/types";
+import { LendingPlatform, Offer, OfferType } from "../types";
+import { BETH } from "../support/currencies";
 
 puppeteer.use(StealthPlugin());
 
@@ -135,5 +137,99 @@ export class GhostApi {
     );
 
     return loans.loanOffers;
+  }
+
+  public async postLoanOffer(
+    collectionAddress: `0x${string}`,
+    principal: number,
+    limit: number,
+    apr: number,
+    expiryInMinutes: number,
+  ): Promise<Offer> {
+    await this.initialise();
+
+    // Format the query
+    const options = {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contractAddress: collectionAddress.toLowerCase(),
+        orders: [
+          {
+            contractAddress: collectionAddress.toLowerCase(),
+            expirationTime: new Date(new Date().getTime() + expiryInMinutes * 60 * 1000).toISOString(),
+            maxAmount: principal.toString(),
+            rate: apr * 10000,
+            totalAmount: limit.toString(),
+          },
+        ],
+        userAddress: this.account.address.toLowerCase(),
+      }),
+    } as RequestInit;
+    const format: any = await this.getPage().evaluate(async (options) => {
+      const response = await fetch("https://core-api.prod.blur.io/v1/blend/loan-offer/format", options);
+      return response.json();
+    }, options);
+
+    // Signing
+    const signData = format.signatures[0].signData;
+    signData.value.minAmount = BigInt(signData.value.minAmount.hex);
+    signData.value.maxAmount = BigInt(signData.value.maxAmount.hex);
+    signData.value.totalAmount = BigInt(signData.value.totalAmount.hex);
+    signData.value.salt = BigInt(signData.value.salt.hex);
+    signData.value.auctionDuration = BigInt(signData.value.auctionDuration.hex);
+    signData.value.expirationTime = BigInt(signData.value.expirationTime.hex);
+
+    const signature = await this.account.signTypedData({
+      domain: signData.domain,
+      types: signData.types,
+      primaryType: "LoanOffer",
+      message: signData.value,
+    });
+
+    // Submit the offer
+    const options2 = {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contractAddress: collectionAddress.toLowerCase(),
+        orders: [
+          {
+            contractAddress: collectionAddress.toLowerCase(),
+            expirationTime: new Date(new Date().getTime() + expiryInMinutes * 60 * 1000).toISOString(),
+            maxAmount: principal.toString(),
+            rate: apr * 10000,
+            totalAmount: limit.toString(),
+            signature: signature,
+            marketplaceData: format.signatures[0].marketplaceData,
+          },
+        ],
+        userAddress: this.account.address.toLowerCase(),
+      }),
+    } as RequestInit;
+    const response: any = await this.getPage().evaluate(async (options2) => {
+      const response = await fetch("https://core-api.prod.blur.io/v1/blend/loan-offer/submit", options2);
+      return response.json();
+    }, options2);
+
+    return {
+      id: response.hashes[0],
+      platform: LendingPlatform.blur,
+      lender: this.account.address,
+      offerDate: new Date(),
+      expiryDate: new Date(new Date().getTime() + expiryInMinutes * 60 * 1000),
+      type: OfferType.collectionOffer,
+      currency: BETH,
+      principal: principal,
+      durationInDays: 0,
+      apr: apr,
+      collateral: {
+        collectionAddress: collectionAddress,
+        collectionName: "",
+        nftId: "",
+      },
+    };
   }
 }

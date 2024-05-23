@@ -1,6 +1,6 @@
 {
   "name": "juna",
-  "version": "3.5.3",
+  "version": "3.6.0",
   "description": "A cross platform NFT lending client for serious lenders",
   "type": "module",
   "sideEffects": false,
