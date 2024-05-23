@@ -1,3 +1,5 @@
+import { LendingPlatform, LoanStatus } from "../../types";
+
 type DecodedLoanReceipt = {
   version: number;
   principal: bigint;
@@ -37,11 +39,37 @@ export function decodeLoanReceipt(hexString: string): DecodedLoanReceipt {
     principal,
     repayment,
     adminFee,
-    borrower: "0x" + borrower,
+    borrower,
     maturity,
     duration,
     collateralToken: "0x" + collateralToken,
     collateralTokenId,
     collateralWrapperContextLen,
+  };
+
+  return {
+    id: 0,
+    platform: LendingPlatform.gondi,
+    borrower: "0x" + borrower,
+    lender: "0x",
+    status: LoanStatus.ongoing,
+    startDate: new Date(gondiLoan.startTime),
+    endDate: gondiLoan.loan.repaidActivity
+      ? new Date(gondiLoan.loan.repaidActivity.timestamp)
+      : addDaysToDate(new Date(gondiLoan.startTime), durationInDays),
+    currency: currency,
+    principal: parseInt(gondiLoan.principalAmount) / 10 ** currency.decimals,
+    interestPayment: (principal * apr * durationInDays) / 365,
+    durationInDays: durationInDays,
+    apr: parseInt(gondiLoan.aprBps) / 10000,
+    collateral: [
+      {
+        collectionAddress: gondiLoan.loan.nft.collection.contractData.contractAddress.toLowerCase() as `0x${string}`,
+        collectionName: CollectionRegistry.getCollectionDetails(
+          gondiLoan.loan.nft.collection.contractData.contractAddress.toLowerCase() as `0x${string}`,
+        ).name,
+        nftId: parseInt(gondiLoan.loan.nft.tokenId),
+      },
+    ],
   };
 }

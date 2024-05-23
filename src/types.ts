@@ -36,6 +36,7 @@ export enum LendingPlatform {
   arcade = "arcade",
   gondi = "gondi",
   blur = "blur",
+  metastreet = "metastreet",
 }
 
 export interface Listing {
