@@ -3,7 +3,7 @@ import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import { Page, Browser } from "puppeteer";
 import { PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { BlurLoan } from "./support/types";
+import { BlurLoan, BlurOffer } from "./support/types";
 
 puppeteer.use(StealthPlugin());
 
@@ -38,9 +38,9 @@ export class GhostApi {
     });
     this.page = await this.browser.newPage();
     await this.page.goto("https://blur.io/");
-    const challenge = await this.challenge();
+    const challenge: any = await this.challenge();
     const signedMessage = await this.account.signMessage({ message: challenge.message });
-    const authToken = await this.login(challenge, signedMessage);
+    const authToken: any = await this.login(challenge, signedMessage);
     this.createCookie(authToken);
     this.initialised = true;
   }
@@ -100,7 +100,7 @@ export class GhostApi {
       method: "GET",
       credentials: "include",
     } as RequestInit;
-    const liens = await this.getPage().evaluate(
+    const liens: any = await this.getPage().evaluate(
       async (options, address) => {
         const response = await fetch(
           `https://core-api.prod.blur.io/v1/portfolio/${address.toLowerCase()}/liens`,
@@ -113,5 +113,27 @@ export class GhostApi {
     );
 
     return liens.liens;
+  }
+
+  public async getLoanOffers(accountAddress: `0x${string}`, collectionAddress?: `0x${string}`): Promise<BlurOffer[]> {
+    await this.initialise();
+    const options = {
+      method: "GET",
+      credentials: "include",
+    } as RequestInit;
+    const loans: any = await this.getPage().evaluate(
+      async (options, accountAddress, collectionAddress) => {
+        const response = await fetch(
+          `https://core-api.prod.blur.io/v1/portfolio/${accountAddress.toLowerCase()}/loan-offers?contractAddress=${collectionAddress}`,
+          options,
+        );
+        return response.json();
+      },
+      options,
+      accountAddress,
+      collectionAddress,
+    );
+
+    return loans.loanOffers;
   }
 }

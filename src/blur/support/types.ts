@@ -1,3 +1,15 @@
+export interface BlurOffer {
+  contractAddress: `0x${string}`;
+  interestRate: string;
+  maxAmount: string;
+  filledAmount: string;
+  totalAmount: string;
+  auctionDuration: number;
+  expiresOn: string;
+  createdAt: string;
+  hash: string;
+}
+
 export interface BlurLoan {
   lien: Lien;
   nft: NFT;

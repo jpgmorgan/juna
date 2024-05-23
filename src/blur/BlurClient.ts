@@ -9,7 +9,7 @@ import {
   CollectionOfferParams,
 } from "../types";
 import { GhostApi } from "./GhostApi";
-import { blurLoanMapper } from "./support/mappers";
+import { blurLoanMapper, blurOfferMapper } from "./support/mappers";
 import { generatePrivateKey } from "viem/accounts";
 
 export class BlurClient implements LendingClientWithPromissoryNotes {
@@ -64,8 +64,7 @@ export class BlurClient implements LendingClientWithPromissoryNotes {
   }
 
   public async getOffersForAccount(address: `0x${string}`): Promise<Offer[]> {
-    console.log(address);
-    throw new Error("Not implemented!");
+    return await this.api.getLoanOffers(address).then((res) => res.map((x) => blurOfferMapper(x, address)));
   }
 
   public async getOffersForCollection(address: `0x${string}`): Promise<Offer[]> {

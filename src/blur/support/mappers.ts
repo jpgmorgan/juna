@@ -1,6 +1,6 @@
-import { WETH } from "../..";
-import { BlurLoan } from "./types";
-import { Loan, LendingPlatform, LoanStatus } from "../../types";
+import { BETH, WETH } from "../..";
+import { BlurLoan, BlurOffer } from "./types";
+import { Loan, LendingPlatform, LoanStatus, Offer, OfferType } from "../../types";
 import { CollectionRegistry } from "../../support/CollectionRegistry";
 
 export const blurLoanMapper = (blurLoan: BlurLoan): Loan => {
@@ -24,5 +24,25 @@ export const blurLoanMapper = (blurLoan: BlurLoan): Loan => {
         nftId: 0,
       },
     ],
+  };
+};
+
+export const blurOfferMapper = (blurOffer: BlurOffer, lender: `0x${string}`): Offer => {
+  return {
+    id: blurOffer.hash,
+    platform: LendingPlatform.blur,
+    lender: lender,
+    offerDate: new Date(blurOffer.createdAt),
+    expiryDate: new Date(blurOffer.expiresOn),
+    type: OfferType.collectionOffer,
+    currency: BETH,
+    principal: Number(blurOffer.maxAmount),
+    durationInDays: 0,
+    apr: Number(blurOffer.interestRate),
+    collateral: {
+      collectionAddress: blurOffer.contractAddress,
+      collectionName: CollectionRegistry.getCollectionDetails(blurOffer.contractAddress).name,
+      nftId: "0",
+    },
   };
 };

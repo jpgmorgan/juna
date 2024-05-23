@@ -16,6 +16,16 @@ describe("blur", () => {
     expect(loans.length).toBeGreaterThan(0);
   }, 10000);
 
+  test("getLoansForAccount:getMultipleLoans", async () => {
+    // given
+    // when
+    const loans = await client.getLoansForAccount(TestConfig.addressBlur);
+
+    // then
+    expect(loans).toBeArray();
+    expect(loans.length).toBeGreaterThan(0);
+  }, 10000);
+
   // TODO: to fix
   test.skip("getLoansForAccount:getNoLoan", async () => {
     // given
