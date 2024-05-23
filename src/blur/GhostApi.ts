@@ -171,6 +171,9 @@ export class GhostApi {
       const response = await fetch("https://core-api.prod.blur.io/v1/blend/loan-offer/format", options);
       return response.json();
     }, options);
+    if (format.statusCode && format.statusCode !== 200) {
+      throw Error(format.message);
+    }
 
     // Signing
     const signData = format.signatures[0].signData;
