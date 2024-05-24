@@ -65,8 +65,8 @@ export default class Offers {
       terms: {
         loan: {
           duration: Number(options.terms.duration),
-          repayment: ((options.terms.repayment / BigInt(1e3)) * BigInt(1e3)).toString(),
-          principal: ((options.terms.principal / BigInt(1e3)) * BigInt(1e3)).toString(),
+          repayment: ((options.terms.repayment / BigInt(1e4)) * BigInt(1e4)).toString(),
+          principal: ((options.terms.principal / BigInt(1e4)) * BigInt(1e4)).toString(),
           currency: options.terms.currency,
           expiry: Number(this.getExpiry(options.terms.expiry.seconds)),
           interest: { prorated: false, bps: 0 },
