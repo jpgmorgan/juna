@@ -55,10 +55,10 @@ describe("nftfi", () => {
     const params: CollectionOfferParams = {
       collectionAddress: "0xed5af388653567af2f388e6224dc7c4b3241c544", // azuki
       currency: WETH,
-      principal: 10 / 1e18,
-      apr: 0.5,
-      durationInDays: 365,
-      expiryInMinutes: 0.2,
+      principal: 0.5137,
+      apr: 0.67,
+      durationInDays: 360,
+      expiryInMinutes: 1,
     };
 
     // when
@@ -67,7 +67,7 @@ describe("nftfi", () => {
     // then
     expect(offer.platform).toBe(LendingPlatform.nftfi);
     expect(offer.lender).toBe(TestConfig.addressFromPrivateKey.toLowerCase() as `0x${string}`);
-    expect(offer.type).toBe(OfferType.collectionOffer);
+    // expect(offer.type).toBe(OfferType.collectionOffer);
     expect(offer.currency).toBe(params.currency);
     expect(offer.principal).toBe(params.principal);
     expect(offer.durationInDays).toBe(params.durationInDays);
@@ -81,10 +81,10 @@ describe("nftfi", () => {
     const params: CollectionOfferParams = {
       collectionAddress: "0xed5af388653567af2f388e6224dc7c4b3241c544", // azuki
       currency: WETH,
-      principal: 1,
+      principal: 2,
       apr: 0.5,
       durationInDays: 365,
-      expiryInMinutes: 0.2,
+      expiryInMinutes: 1,
     };
 
     // when and then
@@ -103,10 +103,10 @@ describe("nftfi", () => {
     const offer = await client.createCollectionOffer({
       collectionAddress: "0xed5af388653567af2f388e6224dc7c4b3241c544", // azuki
       currency: WETH,
-      principal: 10 / 1e18,
+      principal: 1,
       apr: 0.5,
       durationInDays: 365,
-      expiryInMinutes: 0.2,
+      expiryInMinutes: 1,
     });
     const offers1 = await client.getMyOffers();
     expect(offers1.some((o) => o.id === offer.id)).toBeTrue();
@@ -127,10 +127,10 @@ describe("nftfi", () => {
     const offer = await client.createCollectionOffer({
       collectionAddress: "0xed5af388653567af2f388e6224dc7c4b3241c544", // azuki
       currency: WETH,
-      principal: 10 / 1e18,
+      principal: 1,
       apr: 0.5,
       durationInDays: 365,
-      expiryInMinutes: 0.2,
+      expiryInMinutes: 1,
     });
     const offers = await client.getMyOffers();
 

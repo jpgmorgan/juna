@@ -52,31 +52,31 @@ export default class Offers {
   private async constructV2_3FixedCollectionOffer(options: NFTfiOfferParams) {
     let offer = {
       nft: {
-        id: BigInt(0), // offer is for whole collection
+        id: 0, // offer is for whole collection
         address: options.nft.address,
       },
       lender: {
         address: this.account.address,
-        nonce: BigInt(generatePrivateKey()),
+        nonce: BigInt(generatePrivateKey()).toString(),
       },
       referrer: {
         address: "0x0000000000000000000000000000000000000000" as `0x${string}`,
       },
       terms: {
         loan: {
-          duration: options.terms.duration,
-          repayment: options.terms.repayment,
-          principal: options.terms.principal,
+          duration: Number(options.terms.duration),
+          repayment: ((options.terms.repayment / BigInt(1e3)) * BigInt(1e3)).toString(),
+          principal: ((options.terms.principal / BigInt(1e3)) * BigInt(1e3)).toString(),
           currency: options.terms.currency,
-          expiry: this.getExpiry(options.terms.expiry.seconds),
+          expiry: Number(this.getExpiry(options.terms.expiry.seconds)),
           interest: { prorated: false, bps: 0 },
         },
       },
       nftfi: {
         contract: { name: options.nftfi.contract.name },
-        fee: { bps: 500 },
+        fee: { bps: "500" },
       },
-      metadata: undefined,
+
       signature: "",
     };
 
@@ -98,16 +98,16 @@ export default class Offers {
       ],
       [
         offer.terms.loan.currency,
-        offer.terms.loan.principal,
-        offer.terms.loan.repayment,
+        BigInt(offer.terms.loan.principal),
+        BigInt(offer.terms.loan.repayment),
         offer.nft.address,
-        offer.nft.id,
+        BigInt(offer.nft.id),
         offer.referrer.address,
         offer.terms.loan.duration,
-        offer.nftfi.fee.bps,
+        Number(offer.nftfi.fee.bps),
         this.account.address,
-        offer.lender.nonce,
-        offer.terms.loan.expiry,
+        BigInt(offer.lender.nonce),
+        BigInt(offer.terms.loan.expiry),
         "0xD0C6e59B50C32530C627107F50Acc71958C4341F",
         BigInt(mainnet.id),
       ],
