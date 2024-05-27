@@ -25,7 +25,7 @@ export const blurLoanMapper = (blurLoan: BlurLoan): Loan => {
       {
         collectionAddress: blurLoan.lien.contractAddress,
         collectionName: CollectionRegistry.getCollectionDetails(blurLoan.lien.contractAddress).name,
-        nftId: 0,
+        nftId: parseInt(blurLoan.nft.tokenId),
       },
     ],
   };
