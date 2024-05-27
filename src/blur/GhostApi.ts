@@ -1,22 +1,30 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import { Page, Browser } from "puppeteer";
-import { PrivateKeyAccount } from "viem";
+import { PrivateKeyAccount, createWalletClient, WalletClient, http } from "viem";
+import { mainnet } from "viem/chains";
 import { privateKeyToAccount } from "viem/accounts";
 import { BlurLoan, BlurOffer } from "./support/types";
 import { LendingPlatform, Offer, OfferType } from "../types";
 import { BETH } from "../support/currencies";
+import { config } from "../config";
 
 puppeteer.use(StealthPlugin());
 
 export class GhostApi {
+  private client: WalletClient;
   private account: PrivateKeyAccount;
   private browser: Browser | null;
   private page: Page | null;
   private initialised: boolean;
 
-  constructor(privateKey: `0x${string}`) {
+  constructor(privateKey: `0x${string}`, rpcUrl: `https://${string}` = config.defaultRpc) {
     this.account = privateKeyToAccount(privateKey);
+    this.client = createWalletClient({
+      account: this.account,
+      chain: mainnet,
+      transport: http(rpcUrl),
+    });
     this.browser = null;
     this.page = null;
     this.initialised = false;
@@ -39,7 +47,7 @@ export class GhostApi {
       ],
     });
     this.page = await this.browser.newPage();
-    await this.page.goto("https://blur.io/");
+    await this.page.goto(config.blur.baseUrlHome);
     const challenge: any = await this.challenge();
     const signedMessage = await this.account.signMessage({ message: challenge.message });
     const authToken: any = await this.login(challenge, signedMessage);
@@ -51,89 +59,65 @@ export class GhostApi {
     return this.page as Page;
   }
 
-  private async challenge() {
+  private async get(url: string): Promise<any> {
     return await this.getPage().evaluate(
-      async (options) => {
-        const response = await fetch("https://core-api.prod.blur.io/auth/challenge", options);
+      async (url, options) => {
+        const response = await fetch(url, options);
         return response.json();
       },
+      url,
       {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ walletAddress: this.account.address }),
+        method: "GET",
         credentials: "include",
       } as RequestInit,
     );
+  }
+
+  private async post(url: string, payload: {}): Promise<any> {
+    const response = (await this.getPage().evaluate(
+      async (url, options) => {
+        const response = await fetch(url, options);
+        return response.json();
+      },
+      url,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        credentials: "include",
+      } as RequestInit,
+    )) as any;
+
+    if (response.statusCode && response.statusCode !== 200) {
+      throw Error(response.message);
+    }
+
+    return response;
+  }
+
+  private async challenge() {
+    return await this.post(`${config.blur.baseUrlAuth}/challenge`, { walletAddress: this.account.address });
   }
 
   private async login(challenge: {}, signedMessage: `0x${string}`) {
-    return await this.getPage().evaluate(
-      async (options) => {
-        const response = await fetch("https://core-api.prod.blur.io/auth/login", options);
-        return response.json();
-      },
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...challenge, signature: signedMessage }),
-        credentials: "include",
-      } as RequestInit,
-    );
+    return await this.post(`${config.blur.baseUrlAuth}/login`, { ...challenge, signature: signedMessage });
   }
 
   private async createCookie(authToken: { accessToken: string }) {
-    await this.getPage().evaluate(
-      async (options) => {
-        const response = await fetch("https://core-api.prod.blur.io/auth/cookie", options);
-        return response.json();
-      },
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ authToken: authToken.accessToken }),
-        credentials: "include",
-      } as RequestInit,
-    );
+    return await this.post(`${config.blur.baseUrlAuth}/cookie`, { authToken: authToken.accessToken });
   }
 
   public async getLiens(address: `0x${string}`): Promise<BlurLoan[]> {
     await this.initialise();
-    const options = {
-      method: "GET",
-      credentials: "include",
-    } as RequestInit;
-    const liens: any = await this.getPage().evaluate(
-      async (options, address) => {
-        const response = await fetch(
-          `https://core-api.prod.blur.io/v1/portfolio/${address.toLowerCase()}/liens`,
-          options,
-        );
-        return response.json();
-      },
-      options,
-      address,
-    );
+    const liens = await this.get(`${config.blur.baseUrlPortfolio}/${address.toLowerCase()}/liens`);
 
     return liens.liens;
   }
 
   public async getLoanOffers(accountAddress: `0x${string}`, collectionAddress?: `0x${string}`): Promise<BlurOffer[]> {
     await this.initialise();
-    const options = {
-      method: "GET",
-      credentials: "include",
-    } as RequestInit;
-    const loans: any = await this.getPage().evaluate(
-      async (options, accountAddress, collectionAddress) => {
-        const response = await fetch(
-          `https://core-api.prod.blur.io/v1/portfolio/${accountAddress.toLowerCase()}/loan-offers?contractAddress=${collectionAddress}`,
-          options,
-        );
-        return response.json();
-      },
-      options,
-      accountAddress,
-      collectionAddress,
+    const loans = await this.get(
+      `${config.blur.baseUrlPortfolio}/${accountAddress.toLowerCase()}/loan-offers?contractAddress=${collectionAddress}`,
     );
 
     return loans.loanOffers;
@@ -149,31 +133,19 @@ export class GhostApi {
     await this.initialise();
 
     // Format the query
-    const options = {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contractAddress: collectionAddress.toLowerCase(),
-        orders: [
-          {
-            contractAddress: collectionAddress.toLowerCase(),
-            expirationTime: new Date(new Date().getTime() + expiryInMinutes * 60 * 1000).toISOString(),
-            maxAmount: principal.toString(),
-            rate: apr * 10000,
-            totalAmount: limit.toString(),
-          },
-        ],
-        userAddress: this.account.address.toLowerCase(),
-      }),
-    } as RequestInit;
-    const format: any = await this.getPage().evaluate(async (options) => {
-      const response = await fetch("https://core-api.prod.blur.io/v1/blend/loan-offer/format", options);
-      return response.json();
-    }, options);
-    if (format.statusCode && format.statusCode !== 200) {
-      throw Error(format.message);
-    }
+    const format = await this.post(`${config.blur.baseUrlBlend}/loan-offer/format`, {
+      contractAddress: collectionAddress.toLowerCase(),
+      orders: [
+        {
+          contractAddress: collectionAddress.toLowerCase(),
+          expirationTime: new Date(new Date().getTime() + expiryInMinutes * 60 * 1000).toISOString(),
+          maxAmount: principal.toString(),
+          rate: apr * 10000,
+          totalAmount: limit.toString(),
+        },
+      ],
+      userAddress: this.account.address.toLowerCase(),
+    });
 
     // Signing
     const signData = format.signatures[0].signData;
@@ -192,30 +164,21 @@ export class GhostApi {
     });
 
     // Submit the offer
-    const options2 = {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contractAddress: collectionAddress.toLowerCase(),
-        orders: [
-          {
-            contractAddress: collectionAddress.toLowerCase(),
-            expirationTime: new Date(new Date().getTime() + expiryInMinutes * 60 * 1000).toISOString(),
-            maxAmount: principal.toString(),
-            rate: apr * 10000,
-            totalAmount: limit.toString(),
-            signature: signature,
-            marketplaceData: format.signatures[0].marketplaceData,
-          },
-        ],
-        userAddress: this.account.address.toLowerCase(),
-      }),
-    } as RequestInit;
-    const response: any = await this.getPage().evaluate(async (options2) => {
-      const response = await fetch("https://core-api.prod.blur.io/v1/blend/loan-offer/submit", options2);
-      return response.json();
-    }, options2);
+    const response = await this.post(`${config.blur.baseUrlBlend}/loan-offer/submit`, {
+      contractAddress: collectionAddress.toLowerCase(),
+      orders: [
+        {
+          contractAddress: collectionAddress.toLowerCase(),
+          expirationTime: new Date(new Date().getTime() + expiryInMinutes * 60 * 1000).toISOString(),
+          maxAmount: principal.toString(),
+          rate: apr * 10000,
+          totalAmount: limit.toString(),
+          signature: signature,
+          marketplaceData: format.signatures[0].marketplaceData,
+        },
+      ],
+      userAddress: this.account.address.toLowerCase(),
+    });
 
     return {
       id: response.hashes[0],
@@ -234,5 +197,27 @@ export class GhostApi {
         nftId: "",
       },
     };
+  }
+
+  public async recallLoan(collectionAddress: `0x${string}`, loanId: string, nftId: string) {
+    await this.initialise();
+
+    // Fetching the tx data
+    const payload = {
+      userAddress: this.account.address.toLowerCase(),
+      contractAddress: collectionAddress.toLowerCase(),
+      lienRequests: [
+        {
+          lienId: loanId,
+          tokenId: nftId,
+        },
+      ],
+    };
+    const format = await this.post(`${config.blur.baseUrlBlend}/loan-offer/end`, payload);
+
+    // Sending the transaction
+    const tx = format.actions[0].txnData;
+    tx.account = this.account.address;
+    await this.client.sendTransaction(tx);
   }
 }

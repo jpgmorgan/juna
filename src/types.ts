@@ -20,6 +20,10 @@ export interface LendingClient {
   deleteOffer: (offerId: string) => Promise<void>;
 }
 
+export interface LendingClientBlur {
+  recallLoan: (collectionAddress: `0x${string}`, loanId: string, nftId: number) => Promise<void>;
+}
+
 export interface LendingClientWithPromissoryNotes extends LendingClient {
   getPromissoryNote: (loanId: number) => Promise<PromissoryNote>;
 }

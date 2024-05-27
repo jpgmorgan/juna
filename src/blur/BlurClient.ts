@@ -2,21 +2,20 @@ import {
   Loan,
   Offer,
   LendingClientParameters,
-  PromissoryNote,
-  LendingClientWithPromissoryNotes,
   Listing,
   SingleItemOfferParams,
   CollectionOfferParams,
+  LendingClientBlur,
 } from "../types";
+import { config } from "../config";
 import { GhostApi } from "./GhostApi";
 import { blurLoanMapper, blurOfferMapper } from "./support/mappers";
-import { generatePrivateKey } from "viem/accounts";
 
-export class BlurClient implements LendingClientWithPromissoryNotes {
+export class BlurClient implements LendingClientBlur {
   private api: GhostApi;
 
   constructor(p: LendingClientParameters) {
-    this.api = new GhostApi(p.privateKey ?? generatePrivateKey());
+    this.api = new GhostApi(p.privateKey ?? config.defaultPrivateKey, p.rpcUrl ?? config.defaultRpc);
   }
 
   public async getListings(): Promise<Listing[]> {
@@ -81,8 +80,7 @@ export class BlurClient implements LendingClientWithPromissoryNotes {
     throw new Error("Not implemented!");
   }
 
-  public async getPromissoryNote(loanId: number): Promise<PromissoryNote> {
-    console.log(loanId);
-    throw Error("Not implemented");
+  public async recallLoan(collectionAddress: `0x${string}`, loanId: string, nftId: number): Promise<void> {
+    await this.api.recallLoan(collectionAddress, loanId, nftId.toString());
   }
 }
