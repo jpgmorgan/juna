@@ -216,6 +216,7 @@ export class GhostApi {
     const format = await this.post(`${config.blur.baseUrlBlend}/loan-offer/end`, payload);
 
     // Sending the transaction
+    console.log(format);
     const tx = format.actions[0].txnData;
     tx.account = this.account.address;
     await this.client.sendTransaction(tx);
