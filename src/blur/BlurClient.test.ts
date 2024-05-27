@@ -10,7 +10,7 @@ describe("blur", () => {
   test("createCollectionOffer", async () => {
     // given
     // when
-    const offer = await client.createCollectionOffer({
+    await client.createCollectionOffer({
       collectionAddress: "0x5Af0D9827E0c53E4799BB226655A1de152A425a5",
       currency: BETH,
       principal: 0.5,

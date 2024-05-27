@@ -4,6 +4,8 @@ import { Loan, LendingPlatform, LoanStatus, Offer, OfferType } from "../../types
 import { CollectionRegistry } from "../../support/CollectionRegistry";
 
 export const blurLoanMapper = (blurLoan: BlurLoan): Loan => {
+  const durationInDays = (new Date().getTime() - new Date(blurLoan.lien.createdAt).getTime()) / (1000 * 3600 * 24);
+
   return {
     id: blurLoan.lien.lienId,
     platform: LendingPlatform.blur,
@@ -11,11 +13,13 @@ export const blurLoanMapper = (blurLoan: BlurLoan): Loan => {
     lender: blurLoan.lien.lender.address,
     status: blurLoan.lien.repaidAt ? LoanStatus.repaid : LoanStatus.ongoing,
     startDate: new Date(blurLoan.lien.createdAt),
-    endDate: new Date(blurLoan.lien.createdAt),
+    endDate: new Date(),
     currency: WETH,
     principal: parseFloat(blurLoan.lien.principal.amount),
-    interestPayment: 0,
-    durationInDays: 0,
+    interestPayment:
+      (((durationInDays / 365) * parseFloat(blurLoan.lien.interestRateBips)) / 10000) *
+      parseFloat(blurLoan.lien.principal.amount),
+    durationInDays: durationInDays,
     apr: parseFloat(blurLoan.lien.interestRateBips) / 10000,
     collateral: [
       {
