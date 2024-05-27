@@ -218,7 +218,7 @@ export class GhostApi {
     // Sending the transaction
     const tx = format.data.actions[0].txnData;
     tx.account = this.account.address;
-    const signedTx = await this.client.signTransaction(await this.client.prepareTransactionRequest(tx));
+    const signedTx = await this.account.signTransaction(tx);
     await this.client.sendRawTransaction({ serializedTransaction: signedTx });
   }
 }
