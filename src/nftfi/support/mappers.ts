@@ -31,7 +31,7 @@ export const nftfiLoanMapper = (nftfiLoan: NFTfiLoan, lender?: `0x${string}`): L
     id: nftfiLoan.id.toString(),
     platform: LendingPlatform.nftfi,
     borrower: nftfiLoan.borrower.address,
-    lender: lender ?? nftfiLoan.lender.address,
+    lender: (lender?.toLowerCase() ?? nftfiLoan.lender.address) as `0x${string}`,
     status: nftfiStatusMapper(nftfiLoan.status),
     startDate: new Date(nftfiLoan.date.started),
     endDate: nftfiLoan.date.repaid
