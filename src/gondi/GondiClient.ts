@@ -26,7 +26,7 @@ const nowPlusOffset = (offset: number) => {
 };
 
 export interface LendingClientParametersGondi extends LendingClientParameters {
-  originationFeesInPercentage?: number;
+  originationFeeInPercentage?: number;
 }
 
 export class GondiClient implements LendingClientWithPromissoryNotes {
@@ -35,7 +35,7 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
   private loans: Loans;
   private offers: Offers;
   private client: Gondi;
-  private originationFeesInPercentage: number;
+  private originationFeeInPercentage: number;
 
   constructor(p: LendingClientParametersGondi) {
     this.account = privateKeyToAccount(p.privateKey ?? generatePrivateKey());
@@ -50,7 +50,7 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
     });
     this.client = new Gondi({ wallet });
 
-    this.originationFeesInPercentage = p.originationFeesInPercentage ?? 0;
+    this.originationFeeInPercentage = p.originationFeeInPercentage ?? 0;
 
     this.loans = new Loans(this.http);
     this.offers = new Offers(this.http, this.client);
@@ -104,8 +104,10 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
       principalAddress: offerParams.currency.address,
       principalAmount: BigInt(offerParams.principal * 1e18),
       capacity: BigInt(offerParams.principal * 1e18),
-      fee: BigInt(offerParams.principal * this.originationFeesInPercentage * 1e18), // Origination fee
-      aprBps: BigInt(Math.round(offerParams.apr * (1 - this.originationFeesInPercentage) * 10000)),
+      fee: BigInt(
+        ((offerParams.principal * this.originationFeeInPercentage * offerParams.durationInDays) / 365) * 1e18,
+      ), // Origination fee
+      aprBps: BigInt(Math.round(offerParams.apr * (1 - this.originationFeeInPercentage) * 10000)),
       expirationTime: BigInt(nowPlusOffset(offerParams.expiryInMinutes)),
       duration: BigInt(Math.round(offerParams.durationInDays * 24 * 3600)),
       requiresLiquidation: false, // Sets the collateral to be liquidated on default.
