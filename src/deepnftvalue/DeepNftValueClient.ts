@@ -40,7 +40,6 @@ export class DeepNftValueClient {
         return 0;
       }
     } catch (error) {
-      console.error("Error fetching NFT value:", error);
       return 0;
     }
   }

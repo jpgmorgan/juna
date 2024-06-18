@@ -21,4 +21,17 @@ describe("portfolio client", () => {
     expect(loans).toBeArray();
     expect(loans.length).toBeGreaterThan(0);
   }, 10000);
+
+  test("priceMyLoans", async () => {
+    const portfolio = new PortfolioClient([nftfiClient, arcadeClient, gondiClient], [TestConfig.addressArcade]);
+
+    // when
+    const loans = await portfolio.getMyLoans();
+    const loansWithValuations = await portfolio.priceMyLoans(loans);
+
+    // then
+    console.log(loansWithValuations);
+    expect(loans).toBeArray();
+    expect(loans.length).toBeGreaterThan(0);
+  }, 50000);
 });

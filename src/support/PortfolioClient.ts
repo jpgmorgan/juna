@@ -1,12 +1,15 @@
+import { DeepNftValueClient } from "../deepnftvalue/DeepNftValueClient";
 import { LendingClient, Loan, Offer, CollectionOfferParams } from "../types";
 
 export class PortfolioClient {
   private readonly clients: LendingClient[];
   private readonly addresses: `0x${string}`[];
+  private readonly pricer: DeepNftValueClient;
 
   constructor(clients: LendingClient[], addresses: `0x${string}`[]) {
     this.clients = clients;
     this.addresses = addresses;
+    this.pricer = new DeepNftValueClient();
   }
 
   public async createCollectionOffer(offerParams: CollectionOfferParams, logs: boolean = true) {
@@ -27,6 +30,26 @@ export class PortfolioClient {
     for (const client of this.clients) {
       for (const address of this.addresses) {
         loans = loans.concat(await client.getLoansForAccount(address));
+      }
+    }
+
+    return loans;
+  }
+
+  public async priceMyLoans(loans: Loan[]): Promise<Loan[]> {
+    for (const loan of loans) {
+      if (loan.status === "ongoing") {
+        const collateralPrice = await this.pricer.getValuation(
+          loan.collateral[0].collectionAddress,
+          loan.collateral[0].nftId,
+        );
+        if (collateralPrice === 0) {
+          loan.valuation = loan.principal;
+        } else {
+          loan.valuation = Math.min(loan.principal, collateralPrice);
+        }
+      } else {
+        loan.valuation = 0;
       }
     }
 

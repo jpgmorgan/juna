@@ -73,6 +73,7 @@ export interface Loan {
   durationInDays: number;
   apr: number;
   collateral: Collateral[];
+  valuation?: number;
 }
 
 export enum OfferType {
