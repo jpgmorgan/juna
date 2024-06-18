@@ -49,6 +49,7 @@ export interface Listing {
 export enum LoanStatus {
   ongoing = "ongoing",
   repaid = "repaid",
+  auctioned = "auctioned",
   liquidated = "liquidated",
   defaulted = "defaulted",
 }

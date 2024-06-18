@@ -110,7 +110,6 @@ export class GhostApi {
   public async getLiens(address: `0x${string}`): Promise<BlurLoan[]> {
     await this.initialise();
     const liens = await this.get(`${config.blur.baseUrlPortfolio}/${address.toLowerCase()}/liens`);
-
     return liens.liens;
   }
 

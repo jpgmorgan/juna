@@ -11,7 +11,11 @@ export const blurLoanMapper = (blurLoan: BlurLoan): Loan => {
     platform: LendingPlatform.blur,
     borrower: blurLoan.lien.borrower.address,
     lender: blurLoan.lien.lender.address,
-    status: blurLoan.lien.repaidAt ? LoanStatus.repaid : LoanStatus.ongoing,
+    status: blurLoan.lien.repaidAt
+      ? LoanStatus.repaid
+      : blurLoan.lien.auctionStartedAt
+        ? LoanStatus.auctioned
+        : LoanStatus.ongoing,
     startDate: new Date(blurLoan.lien.createdAt),
     endDate: new Date(),
     currency: WETH,
