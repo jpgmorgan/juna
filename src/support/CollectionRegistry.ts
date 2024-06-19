@@ -109,6 +109,10 @@ export const defaultRegistry: Collections = {
     address: "0x036721e5a769cc48b3189efbb9cce4471e8a48b1",
     name: "Checks - VV Originals",
   },
+  "0xa7d8d9ef8d8ce8992df33d8b8cf4aebabd5bd270": {
+    address: "0xa7d8d9ef8d8ce8992df33d8b8cf4aebabd5bd270",
+    name: "Art Blocks",
+  },
 };
 
 export class CollectionRegistry {
