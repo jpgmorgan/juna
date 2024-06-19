@@ -38,7 +38,7 @@ export class PortfolioClient {
 
   public async priceMyLoans(loans: Loan[]): Promise<Loan[]> {
     for (const loan of loans) {
-      if (loan.status === "ongoing") {
+      if (loan.status === "ongoing" || loan.status === "auctioned") {
         const collateralPrice = await this.pricer.getValuation(
           loan.collateral[0].collectionAddress,
           loan.collateral[0].nftId,
