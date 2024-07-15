@@ -56,12 +56,20 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
     this.offers = new Offers(this.http, this.client);
   }
 
-  public async _getCollectionId(collectionAddress: `0x${string}`): Promise<any> {
-    const collectionId = (
-      await this.client.collectionId({
-        contractAddress: collectionAddress,
-      })
-    )[0];
+  public async _getCollectionId(collectionAddress: `0x${string}`, slug?: string): Promise<any> {
+    let collectionId: number;
+    if (slug) {
+      collectionId = await this.client.collectionId({
+        slug: slug,
+      });
+    } else {
+      collectionId = (
+        await this.client.collectionId({
+          contractAddress: collectionAddress,
+        })
+      )[0];
+    }
+
     if (collectionId === undefined) {
       throw new CollectionNotSupported();
     }
@@ -100,7 +108,7 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
 
   public async createCollectionOffer(offerParams: CollectionOfferParams): Promise<Offer> {
     const payload = {
-      collectionId: await this._getCollectionId(offerParams.collectionAddress),
+      collectionId: await this._getCollectionId(offerParams.collectionAddress, offerParams.slug),
       principalAddress: offerParams.currency.address,
       principalAmount: BigInt(offerParams.principal * 1e18),
       capacity: BigInt(offerParams.principal * 1e18),

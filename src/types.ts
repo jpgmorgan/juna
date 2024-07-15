@@ -107,6 +107,7 @@ export interface CollectionOfferParams {
   apr: number;
   durationInDays: number;
   expiryInMinutes: number;
+  slug?: string;
   lenderAddress?: `0x${string}`;
   limit?: number;
 }
