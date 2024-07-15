@@ -59,6 +59,28 @@ export class ReservoirClient {
     };
   }
 
+  public async getQuotesBySlug(slug: string): Promise<Quotes> {
+    const response: CollectionsAnswer = await this.axiosInstance
+      .get(`/collections/v7`, {
+        params: { slug: slug },
+      })
+      .then((response) => response.data);
+
+    const bidPrice = response.collections[0].topBid.price || response.collections[0].floorAsk.price;
+    const askPrice = response.collections[0].floorAsk.price || response.collections[0].topBid.price;
+
+    return {
+      bid: {
+        eth: bidPrice.amount.native,
+        usd: bidPrice.amount.usd,
+      },
+      ask: {
+        eth: askPrice.amount.native,
+        usd: askPrice.amount.usd,
+      },
+    };
+  }
+
   public async getQuotesForPunks(): Promise<Quotes> {
     const response: CollectionsAnswer = await this.axiosInstance
       .get(`/collections/v7`, {
