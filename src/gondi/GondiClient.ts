@@ -113,9 +113,11 @@ export class GondiClient implements LendingClientWithPromissoryNotes {
       principalAmount: BigInt(offerParams.principal * 1e18),
       capacity: BigInt(offerParams.principal * 1e18),
       fee: BigInt(
-        ((offerParams.principal * this.originationFeeInPercentage * offerParams.apr * offerParams.durationInDays) /
-          365) *
-          1e18,
+        Math.round(
+          ((offerParams.principal * this.originationFeeInPercentage * offerParams.apr * offerParams.durationInDays) /
+            365) *
+            1e18,
+        ),
       ), // Origination fee
       aprBps: BigInt(Math.round(offerParams.apr * (1 - this.originationFeeInPercentage) * 10000)),
       expirationTime: BigInt(nowPlusOffset(offerParams.expiryInMinutes)),
